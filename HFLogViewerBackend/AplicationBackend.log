@@ -1,0 +1,127 @@
+2020-06-21 16:26:50,088 INFO com.avinash.hotfixviewer.HotfixviewerApplication [main] Starting HotfixviewerApplication on avinasht01 with PID 13196 (C:\Work\Projects\Hotfix Viewer Spring\HFLogViewerBackend\target\classes started by avinasht in C:\Work\Projects\Hotfix Viewer Spring\HFLogViewerBackend)
+2020-06-21 16:26:50,090 INFO com.avinash.hotfixviewer.HotfixviewerApplication [main] No active profile set, falling back to default profiles: default
+2020-06-21 16:26:51,112 INFO org.apache.catalina.core.StandardService [main] Starting service [Tomcat]
+2020-06-21 16:26:51,115 INFO org.apache.catalina.core.StandardEngine [main] Starting Servlet engine: [Apache Tomcat/9.0.34]
+2020-06-21 16:26:51,117 INFO org.apache.catalina.core.AprLifecycleListener [main] An older version [1.2.16] of the APR based Apache Tomcat Native library is installed, while Tomcat recommends a minimum version of [1.2.23]
+2020-06-21 16:26:51,117 INFO org.apache.catalina.core.AprLifecycleListener [main] Loaded APR based Apache Tomcat Native library [1.2.16] using APR version [1.6.3].
+2020-06-21 16:26:51,117 INFO org.apache.catalina.core.AprLifecycleListener [main] APR capabilities: IPv6 [true], sendfile [true], accept filters [false], random [true].
+2020-06-21 16:26:51,117 INFO org.apache.catalina.core.AprLifecycleListener [main] APR/OpenSSL configuration: useAprConnector [false], useOpenSSL [true]
+2020-06-21 16:26:52,175 INFO org.apache.catalina.core.AprLifecycleListener [main] OpenSSL successfully initialized [OpenSSL 1.0.2m  2 Nov 2017]
+2020-06-21 16:26:52,309 INFO org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] [main] Initializing Spring embedded WebApplicationContext
+2020-06-21 16:26:52,689 INFO org.mongodb.driver.cluster [main] Cluster created with settings {hosts=[localhost:27017], mode=MULTIPLE, requiredClusterType=UNKNOWN, serverSelectionTimeout='30000 ms', maxWaitQueueSize=500}
+2020-06-21 16:26:52,690 INFO org.mongodb.driver.cluster [main] Adding discovered server localhost:27017 to client view of cluster
+2020-06-21 16:26:52,755 INFO org.mongodb.driver.connection [cluster-ClusterId{value='5eef3cf4d1af5101cefeac3a', description='null'}-localhost:27017] Opened connection [connectionId{localValue:1, serverValue:3}] to localhost:27017
+2020-06-21 16:26:52,760 INFO org.mongodb.driver.cluster [cluster-ClusterId{value='5eef3cf4d1af5101cefeac3a', description='null'}-localhost:27017] Monitor thread successfully connected to server with description ServerDescription{address=localhost:27017, type=STANDALONE, state=CONNECTED, ok=true, version=ServerVersion{versionList=[4, 2, 6]}, minWireVersion=0, maxWireVersion=8, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=3202280}
+2020-06-21 16:26:52,761 INFO org.mongodb.driver.cluster [cluster-ClusterId{value='5eef3cf4d1af5101cefeac3a', description='null'}-localhost:27017] Discovered cluster type of STANDALONE
+2020-06-21 16:26:54,003 INFO com.avinash.hotfixviewer.HotfixviewerApplication [main] Started HotfixviewerApplication in 4.252 seconds (JVM running for 5.395)
+2020-06-21 16:26:54,004 INFO com.avinash.hotfixviewer.HotfixviewerApplication [main] 
+
+
+------------>> Hotfix Application Started <<------------
+2020-06-21 16:26:58,849 INFO org.mongodb.driver.connection [main] Opened connection [connectionId{localValue:2, serverValue:4}] to localhost:27017
+2020-06-21 16:26:59,254 INFO com.avinash.hotfixviewer.Service.ECPFileHandler [main] Old records Deleted.
+2020-06-21 16:26:59,924 INFO com.avinash.hotfixviewer.Service.ECPFileHandler [main] Data copy started: Sun Jun 21 16:26:59 IST 2020
+2020-06-21 16:27:16,830 INFO com.avinash.hotfixviewer.Service.ECPFileHandler [main] Data copy finished: Sun Jun 21 16:27:16 IST 2020
+2020-06-21 16:27:16,833 INFO com.avinash.hotfixviewer.HotfixviewerApplication [main] Data loaded in DB. Records inserted: 13690
+2020-06-21 16:27:19,272 INFO com.avinash.hotfixviewer.HotfixviewerApplication [main] Retrieved distinct cramer versions and modules.
+2020-06-21 16:31:01,306 INFO org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] [http-nio-7777-exec-2] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-06-21 16:32:15,177 INFO org.mongodb.driver.connection [RMI TCP Connection(14)-127.0.0.1] Closed connection [connectionId{localValue:2, serverValue:4}] to localhost:27017 because the pool has been closed.
+2020-06-21 16:32:32,060 INFO com.avinash.hotfixviewer.HotfixviewerApplication [main] Starting HotfixviewerApplication on avinasht01 with PID 6368 (C:\Work\Projects\Hotfix Viewer Spring\HFLogViewerBackend\target\classes started by avinasht in C:\Work\Projects\Hotfix Viewer Spring\HFLogViewerBackend)
+2020-06-21 16:32:32,063 INFO com.avinash.hotfixviewer.HotfixviewerApplication [main] No active profile set, falling back to default profiles: default
+2020-06-21 16:32:32,999 INFO org.apache.catalina.core.StandardService [main] Starting service [Tomcat]
+2020-06-21 16:32:33,000 INFO org.apache.catalina.core.StandardEngine [main] Starting Servlet engine: [Apache Tomcat/9.0.34]
+2020-06-21 16:32:33,002 INFO org.apache.catalina.core.AprLifecycleListener [main] An older version [1.2.16] of the APR based Apache Tomcat Native library is installed, while Tomcat recommends a minimum version of [1.2.23]
+2020-06-21 16:32:33,002 INFO org.apache.catalina.core.AprLifecycleListener [main] Loaded APR based Apache Tomcat Native library [1.2.16] using APR version [1.6.3].
+2020-06-21 16:32:33,002 INFO org.apache.catalina.core.AprLifecycleListener [main] APR capabilities: IPv6 [true], sendfile [true], accept filters [false], random [true].
+2020-06-21 16:32:33,002 INFO org.apache.catalina.core.AprLifecycleListener [main] APR/OpenSSL configuration: useAprConnector [false], useOpenSSL [true]
+2020-06-21 16:32:34,075 INFO org.apache.catalina.core.AprLifecycleListener [main] OpenSSL successfully initialized [OpenSSL 1.0.2m  2 Nov 2017]
+2020-06-21 16:32:34,193 INFO org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] [main] Initializing Spring embedded WebApplicationContext
+2020-06-21 16:32:34,590 INFO org.mongodb.driver.cluster [main] Cluster created with settings {hosts=[localhost:27017], mode=MULTIPLE, requiredClusterType=UNKNOWN, serverSelectionTimeout='30000 ms', maxWaitQueueSize=500}
+2020-06-21 16:32:34,590 INFO org.mongodb.driver.cluster [main] Adding discovered server localhost:27017 to client view of cluster
+2020-06-21 16:32:34,643 INFO org.mongodb.driver.connection [cluster-ClusterId{value='5eef3e4ae0082a2b2bbe6e9a', description='null'}-localhost:27017] Opened connection [connectionId{localValue:1, serverValue:5}] to localhost:27017
+2020-06-21 16:32:34,647 INFO org.mongodb.driver.cluster [cluster-ClusterId{value='5eef3e4ae0082a2b2bbe6e9a', description='null'}-localhost:27017] Monitor thread successfully connected to server with description ServerDescription{address=localhost:27017, type=STANDALONE, state=CONNECTED, ok=true, version=ServerVersion{versionList=[4, 2, 6]}, minWireVersion=0, maxWireVersion=8, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=2343014}
+2020-06-21 16:32:34,647 INFO org.mongodb.driver.cluster [cluster-ClusterId{value='5eef3e4ae0082a2b2bbe6e9a', description='null'}-localhost:27017] Discovered cluster type of STANDALONE
+2020-06-21 16:32:35,837 INFO com.avinash.hotfixviewer.HotfixviewerApplication [main] Started HotfixviewerApplication in 4.129 seconds (JVM running for 5.228)
+2020-06-21 16:32:35,838 INFO com.avinash.hotfixviewer.HotfixviewerApplication [main] 
+
+
+------------>> Hotfix Application Started <<------------
+2020-06-21 16:32:40,976 INFO org.mongodb.driver.connection [main] Opened connection [connectionId{localValue:2, serverValue:6}] to localhost:27017
+2020-06-21 16:32:41,346 INFO com.avinash.hotfixviewer.Service.ECPFileHandler [main] Old records Deleted.
+2020-06-21 16:32:41,966 INFO com.avinash.hotfixviewer.Service.ECPFileHandler [main] Data copy started: Sun Jun 21 16:32:41 IST 2020
+2020-06-21 16:32:57,685 INFO com.avinash.hotfixviewer.Service.ECPFileHandler [main] Data copy finished: Sun Jun 21 16:32:57 IST 2020
+2020-06-21 16:32:57,687 INFO com.avinash.hotfixviewer.HotfixviewerApplication [main] Data loaded in DB. Records inserted: 13690
+2020-06-21 16:33:00,019 INFO com.avinash.hotfixviewer.HotfixviewerApplication [main] Retrieved distinct cramer versions and modules.
+2020-06-21 16:33:15,009 INFO org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] [http-nio-7777-exec-2] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-06-21 16:33:22,392 INFO com.avinash.hotfixviewer.Controller.EcpLogController [http-nio-7777-exec-4] --------------
+2020-06-21 16:33:22,393 INFO com.avinash.hotfixviewer.Controller.EcpLogController [http-nio-7777-exec-4] User:	Avinash
+2020-06-21 16:33:22,393 INFO com.avinash.hotfixviewer.Controller.EcpLogController [http-nio-7777-exec-4] Input:	Test
+2020-06-21 16:33:50,838 INFO com.avinash.hotfixviewer.Controller.EcpLogController [http-nio-7777-exec-5] --------------
+2020-06-21 16:33:50,840 INFO com.avinash.hotfixviewer.Controller.EcpLogController [http-nio-7777-exec-5] User:	Avinash
+2020-06-21 16:33:50,840 INFO com.avinash.hotfixviewer.Controller.EcpLogController [http-nio-7777-exec-5] Input:	Test
+2020-06-21 16:35:12,012 INFO org.mongodb.driver.connection [RMI TCP Connection(14)-127.0.0.1] Closed connection [connectionId{localValue:2, serverValue:6}] to localhost:27017 because the pool has been closed.
+2020-06-21 16:35:34,652 INFO com.avinash.hotfixviewer.HotfixviewerApplicationTests [main] Starting HotfixviewerApplicationTests on avinasht01 with PID 15236 (started by avinasht in C:\Work\Projects\Hotfix Viewer Spring\HFLogViewerBackend)
+2020-06-21 16:35:34,655 INFO com.avinash.hotfixviewer.HotfixviewerApplicationTests [main] No active profile set, falling back to default profiles: default
+2020-06-21 16:35:36,456 INFO org.mongodb.driver.cluster [main] Cluster created with settings {hosts=[localhost:27017], mode=MULTIPLE, requiredClusterType=UNKNOWN, serverSelectionTimeout='30000 ms', maxWaitQueueSize=500}
+2020-06-21 16:35:36,457 INFO org.mongodb.driver.cluster [main] Adding discovered server localhost:27017 to client view of cluster
+2020-06-21 16:35:36,538 INFO org.mongodb.driver.connection [cluster-ClusterId{value='5eef3f009094eb0a0a337af5', description='null'}-localhost:27017] Opened connection [connectionId{localValue:1, serverValue:7}] to localhost:27017
+2020-06-21 16:35:36,543 INFO org.mongodb.driver.cluster [cluster-ClusterId{value='5eef3f009094eb0a0a337af5', description='null'}-localhost:27017] Monitor thread successfully connected to server with description ServerDescription{address=localhost:27017, type=STANDALONE, state=CONNECTED, ok=true, version=ServerVersion{versionList=[4, 2, 6]}, minWireVersion=0, maxWireVersion=8, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=2991232}
+2020-06-21 16:35:36,544 INFO org.mongodb.driver.cluster [cluster-ClusterId{value='5eef3f009094eb0a0a337af5', description='null'}-localhost:27017] Discovered cluster type of STANDALONE
+2020-06-21 16:35:38,983 INFO com.avinash.hotfixviewer.HotfixviewerApplicationTests [main] Started HotfixviewerApplicationTests in 4.841 seconds (JVM running for 5.925)
+2020-06-21 16:35:38,985 INFO com.avinash.hotfixviewer.HotfixviewerApplication [main] 
+
+
+------------>> Hotfix Application Started <<------------
+2020-06-21 16:35:43,565 INFO org.mongodb.driver.connection [main] Opened connection [connectionId{localValue:2, serverValue:8}] to localhost:27017
+2020-06-21 16:35:43,841 INFO com.avinash.hotfixviewer.Service.ECPFileHandler [main] Old records Deleted.
+2020-06-21 16:35:44,549 INFO com.avinash.hotfixviewer.Service.ECPFileHandler [main] Data copy started: Sun Jun 21 16:35:44 IST 2020
+2020-06-21 16:35:58,184 INFO com.avinash.hotfixviewer.Service.ECPFileHandler [main] Data copy finished: Sun Jun 21 16:35:58 IST 2020
+2020-06-21 16:35:58,187 INFO com.avinash.hotfixviewer.HotfixviewerApplication [main] Data loaded in DB. Records inserted: 13690
+2020-06-21 16:35:59,967 INFO com.avinash.hotfixviewer.HotfixviewerApplication [main] Retrieved distinct cramer versions and modules.
+2020-06-21 16:36:00,299 INFO org.mongodb.driver.connection [SpringContextShutdownHook] Closed connection [connectionId{localValue:2, serverValue:8}] to localhost:27017 because the pool has been closed.
+2020-06-21 16:37:07,881 INFO com.avinash.hotfixviewer.HotfixviewerApplication [main] Starting HotfixviewerApplication on avinasht01 with PID 13132 (C:\Work\Projects\Hotfix Viewer Spring\HFLogViewerBackend\target\classes started by avinasht in C:\Work\Projects\Hotfix Viewer Spring\HFLogViewerBackend)
+2020-06-21 16:37:07,883 INFO com.avinash.hotfixviewer.HotfixviewerApplication [main] No active profile set, falling back to default profiles: default
+2020-06-21 16:37:08,802 INFO org.apache.catalina.core.StandardService [main] Starting service [Tomcat]
+2020-06-21 16:37:08,802 INFO org.apache.catalina.core.StandardEngine [main] Starting Servlet engine: [Apache Tomcat/9.0.34]
+2020-06-21 16:37:08,803 INFO org.apache.catalina.core.AprLifecycleListener [main] An older version [1.2.16] of the APR based Apache Tomcat Native library is installed, while Tomcat recommends a minimum version of [1.2.23]
+2020-06-21 16:37:08,804 INFO org.apache.catalina.core.AprLifecycleListener [main] Loaded APR based Apache Tomcat Native library [1.2.16] using APR version [1.6.3].
+2020-06-21 16:37:08,804 INFO org.apache.catalina.core.AprLifecycleListener [main] APR capabilities: IPv6 [true], sendfile [true], accept filters [false], random [true].
+2020-06-21 16:37:08,804 INFO org.apache.catalina.core.AprLifecycleListener [main] APR/OpenSSL configuration: useAprConnector [false], useOpenSSL [true]
+2020-06-21 16:37:09,875 INFO org.apache.catalina.core.AprLifecycleListener [main] OpenSSL successfully initialized [OpenSSL 1.0.2m  2 Nov 2017]
+2020-06-21 16:37:09,991 INFO org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] [main] Initializing Spring embedded WebApplicationContext
+2020-06-21 16:37:10,341 INFO org.mongodb.driver.cluster [main] Cluster created with settings {hosts=[localhost:27017], mode=MULTIPLE, requiredClusterType=UNKNOWN, serverSelectionTimeout='30000 ms', maxWaitQueueSize=500}
+2020-06-21 16:37:10,342 INFO org.mongodb.driver.cluster [main] Adding discovered server localhost:27017 to client view of cluster
+2020-06-21 16:37:10,393 INFO org.mongodb.driver.connection [cluster-ClusterId{value='5eef3f5eaa865b1b56dbdae4', description='null'}-localhost:27017] Opened connection [connectionId{localValue:1, serverValue:9}] to localhost:27017
+2020-06-21 16:37:10,397 INFO org.mongodb.driver.cluster [cluster-ClusterId{value='5eef3f5eaa865b1b56dbdae4', description='null'}-localhost:27017] Monitor thread successfully connected to server with description ServerDescription{address=localhost:27017, type=STANDALONE, state=CONNECTED, ok=true, version=ServerVersion{versionList=[4, 2, 6]}, minWireVersion=0, maxWireVersion=8, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=2901745}
+2020-06-21 16:37:10,398 INFO org.mongodb.driver.cluster [cluster-ClusterId{value='5eef3f5eaa865b1b56dbdae4', description='null'}-localhost:27017] Discovered cluster type of STANDALONE
+2020-06-21 16:37:11,531 INFO com.avinash.hotfixviewer.HotfixviewerApplication [main] Started HotfixviewerApplication in 3.977 seconds (JVM running for 5.06)
+2020-06-21 16:37:11,532 INFO com.avinash.hotfixviewer.HotfixviewerApplication [main] 
+
+
+------------>> Hotfix Application Started <<------------
+2020-06-21 16:37:16,157 INFO org.mongodb.driver.connection [main] Opened connection [connectionId{localValue:2, serverValue:10}] to localhost:27017
+2020-06-21 16:37:16,363 INFO com.avinash.hotfixviewer.Service.ECPFileHandler [main] Old records Deleted.
+2020-06-21 16:37:17,019 INFO com.avinash.hotfixviewer.Service.ECPFileHandler [main] Data copy started: Sun Jun 21 16:37:17 IST 2020
+2020-06-21 16:37:32,158 INFO com.avinash.hotfixviewer.Service.ECPFileHandler [main] Data copy finished: Sun Jun 21 16:37:32 IST 2020
+2020-06-21 16:37:32,161 INFO com.avinash.hotfixviewer.HotfixviewerApplication [main] Data loaded in DB. Records inserted: 13690
+2020-06-21 16:37:34,516 INFO com.avinash.hotfixviewer.HotfixviewerApplication [main] Retrieved distinct cramer versions and modules.
+2020-06-21 16:37:42,129 INFO org.mongodb.driver.connection [RMI TCP Connection(9)-127.0.0.1] Closed connection [connectionId{localValue:2, serverValue:10}] to localhost:27017 because the pool has been closed.
+2020-06-21 16:38:03,505 INFO com.avinash.hotfixviewer.HotfixviewerApplicationTests [main] Starting HotfixviewerApplicationTests on avinasht01 with PID 10900 (started by avinasht in C:\Work\Projects\Hotfix Viewer Spring\HFLogViewerBackend)
+2020-06-21 16:38:03,506 INFO com.avinash.hotfixviewer.HotfixviewerApplicationTests [main] No active profile set, falling back to default profiles: default
+2020-06-21 16:38:05,135 INFO org.mongodb.driver.cluster [main] Cluster created with settings {hosts=[localhost:27017], mode=MULTIPLE, requiredClusterType=UNKNOWN, serverSelectionTimeout='30000 ms', maxWaitQueueSize=500}
+2020-06-21 16:38:05,135 INFO org.mongodb.driver.cluster [main] Adding discovered server localhost:27017 to client view of cluster
+2020-06-21 16:38:05,199 INFO org.mongodb.driver.connection [cluster-ClusterId{value='5eef3f95da4166694f93fba2', description='null'}-localhost:27017] Opened connection [connectionId{localValue:1, serverValue:11}] to localhost:27017
+2020-06-21 16:38:05,204 INFO org.mongodb.driver.cluster [cluster-ClusterId{value='5eef3f95da4166694f93fba2', description='null'}-localhost:27017] Monitor thread successfully connected to server with description ServerDescription{address=localhost:27017, type=STANDALONE, state=CONNECTED, ok=true, version=ServerVersion{versionList=[4, 2, 6]}, minWireVersion=0, maxWireVersion=8, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=3059550}
+2020-06-21 16:38:05,204 INFO org.mongodb.driver.cluster [cluster-ClusterId{value='5eef3f95da4166694f93fba2', description='null'}-localhost:27017] Discovered cluster type of STANDALONE
+2020-06-21 16:38:07,777 INFO com.avinash.hotfixviewer.HotfixviewerApplicationTests [main] Started HotfixviewerApplicationTests in 4.783 seconds (JVM running for 5.803)
+2020-06-21 16:38:07,779 INFO com.avinash.hotfixviewer.HotfixviewerApplication [main] 
+
+
+------------>> Hotfix Application Started <<------------
+2020-06-21 16:38:12,718 INFO org.mongodb.driver.connection [main] Opened connection [connectionId{localValue:2, serverValue:12}] to localhost:27017
+2020-06-21 16:38:12,944 INFO com.avinash.hotfixviewer.Service.ECPFileHandler [main] Old records Deleted.
+2020-06-21 16:38:13,606 INFO com.avinash.hotfixviewer.Service.ECPFileHandler [main] Data copy started: Sun Jun 21 16:38:13 IST 2020
+2020-06-21 16:38:27,477 INFO com.avinash.hotfixviewer.Service.ECPFileHandler [main] Data copy finished: Sun Jun 21 16:38:27 IST 2020
+2020-06-21 16:38:27,481 INFO com.avinash.hotfixviewer.HotfixviewerApplication [main] Data loaded in DB. Records inserted: 13690
+2020-06-21 16:38:29,338 INFO com.avinash.hotfixviewer.HotfixviewerApplication [main] Retrieved distinct cramer versions and modules.
+2020-06-21 16:38:29,705 INFO org.mongodb.driver.connection [SpringContextShutdownHook] Closed connection [connectionId{localValue:2, serverValue:12}] to localhost:27017 because the pool has been closed.

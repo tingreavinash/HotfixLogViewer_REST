@@ -86,7 +86,7 @@ public class ECPFileHandler {
 					row_values.clear();
 				}
 			}
-			updateSummaryInDB();
+			saveSummaryInDB();
 			LOG.info("Data copy finished: " + new Date());
 			
 		} catch (FileNotFoundException ex) {
@@ -106,7 +106,7 @@ public class ECPFileHandler {
 		return total_records;
 	}
 	
-	private void updateSummaryInDB() {
+	private void saveSummaryInDB() {
 		
 		long oldRecords =0;
 		if (dbhistoryService.getLatestSummary() !=null) {

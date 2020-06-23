@@ -3,4 +3,4 @@ excelFilePath: C:\Work\Projects\Hotfix Viewer Spring\Executables\Excel File\ECPL
 allowedHosts: avinasht01,0:0:0:0:0:0:0:1,localhost,127.0.0.1
 
 #ACCESS_CONTROL_ALLOW_ORIGIN (Deprecated property)
-header_acao: http://localhost:7777
+header_acao: http://localhost:80

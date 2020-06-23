@@ -12,7 +12,7 @@ import java.util.Map;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document("ECPLog")
+@Document("HotfixDetails")
 public class ECPLog implements Comparable{
 	@Id
 	private long _id;

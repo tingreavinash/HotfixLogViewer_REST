@@ -155,6 +155,10 @@ public class ECPLogService {
 		return ecpRepo.findAll();
 	}
 	
+	public long getCountOfHotfixes() {
+		return ecpRepo.count();
+	}
+	
 	public Map<Integer, String> getUnderlyingHF(String latestEcp){
 		List<ECPLog> ecp = ecpRepo.findByLatestEcp(latestEcp);
 		Map<Integer, String> result_map= new TreeMap<Integer, String>(Collections.reverseOrder());

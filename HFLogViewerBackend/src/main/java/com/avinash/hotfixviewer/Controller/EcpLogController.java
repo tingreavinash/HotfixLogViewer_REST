@@ -5,6 +5,7 @@
 package com.avinash.hotfixviewer.Controller;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -24,10 +25,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.avinash.hotfixviewer.HotfixviewerApplication;
+import com.avinash.hotfixviewer.Model.DBHistory;
 import com.avinash.hotfixviewer.Model.ECPLog;
 import com.avinash.hotfixviewer.Model.ECPLogResponseObject;
 import com.avinash.hotfixviewer.Model.UnderlyingHFResponseObject;
 import com.avinash.hotfixviewer.Model.YAMLConfig;
+import com.avinash.hotfixviewer.Service.DBHistoryService;
 import com.avinash.hotfixviewer.Service.ECPFileHandler;
 import com.avinash.hotfixviewer.Service.ECPLogService;
 
@@ -44,7 +47,8 @@ public class EcpLogController {
 	private ECPFileHandler ecpExcel;
 	@Autowired
 	private YAMLConfig customConfig;
-
+	@Autowired
+	private DBHistoryService dbhistoryService;
 	/**
 	 * REST endpoint for getting "Pageable" results matching below parameters.
 	 * @param page_no (mandatory)
@@ -247,7 +251,13 @@ public class EcpLogController {
 		return new ResponseEntity<List<String>>(HttpStatus.UNAUTHORIZED);
 
 	}
-
+	
+	@RequestMapping(value="/getSummary", method=RequestMethod.GET)
+	public DBHistory getDatabaseSummary() {
+		DBHistory summary = dbhistoryService.getLatestSummary();
+		return summary ;
+	}
+	
 	@RequestMapping(value = "/getDistinctModules", method = RequestMethod.GET)
 	public ResponseEntity<List<String>> getDistinctModules(
 			HttpServletRequest request) {

@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.avinash.hotfixviewer.Model.DBHistory;
 import com.avinash.hotfixviewer.Model.ECPLog;
 import com.avinash.hotfixviewer.Model.YAMLConfig;
 import com.monitorjbl.xlsx.StreamingReader;
@@ -39,7 +40,8 @@ public class ECPFileHandler {
 
 	@Autowired
 	private ECPLogService ecpService;
-
+	@Autowired
+	private DBHistoryService dbhistoryService;
 	@Autowired
 	public YAMLConfig customConfig;
 
@@ -84,7 +86,7 @@ public class ECPFileHandler {
 					row_values.clear();
 				}
 			}
-
+			updateSummaryInDB();
 			LOG.info("Data copy finished: " + new Date());
 			
 		} catch (FileNotFoundException ex) {
@@ -103,7 +105,24 @@ public class ECPFileHandler {
 		}
 		return total_records;
 	}
-
+	
+	private void updateSummaryInDB() {
+		
+		long oldRecords =0;
+		if (dbhistoryService.getLatestSummary() !=null) {
+			DBHistory oldSummary =dbhistoryService.getLatestSummary();
+			oldRecords=oldSummary.getTotalHotfixes();	
+		}
+		 
+		
+		DBHistory summary = new DBHistory();
+		summary.setDatabaseCreatedAt(new Date());
+		summary.setNewlyAddedHotfixes(ecpService.getCountOfHotfixes() - oldRecords);
+		summary.setTotalHotfixes(ecpService.getCountOfHotfixes());
+		dbhistoryService.addDBHistory(summary);
+		LOG.info("Summary updated in DB !");
+		
+	}
 	/**
 	 * Private method for converting "Row" into List of strings.
 	 * 

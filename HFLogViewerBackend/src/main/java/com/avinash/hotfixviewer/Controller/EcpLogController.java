@@ -5,8 +5,6 @@
 package com.avinash.hotfixviewer.Controller;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +29,6 @@ import com.avinash.hotfixviewer.Model.ECPLogResponseObject;
 import com.avinash.hotfixviewer.Model.UnderlyingHFResponseObject;
 import com.avinash.hotfixviewer.Model.YAMLConfig;
 import com.avinash.hotfixviewer.Service.DBHistoryService;
-import com.avinash.hotfixviewer.Service.ECPFileHandler;
 import com.avinash.hotfixviewer.Service.ECPLogService;
 
 
@@ -43,8 +40,7 @@ public class EcpLogController {
 	
 	@Autowired
 	private ECPLogService ecpService;
-	@Autowired
-	private ECPFileHandler ecpExcel;
+	
 	@Autowired
 	private YAMLConfig customConfig;
 	@Autowired
@@ -85,34 +81,30 @@ public class EcpLogController {
 			@RequestParam(value = "rolledIntoVersion", defaultValue = "", required = false) String rolledIntoVersion,
 			@RequestParam(value = "specificFunc", defaultValue = "", required = false) String specificFunc,
 			HttpServletRequest request) {
-		String client = request.getRemoteHost();
 
-		if (true) {
-			//To restrict the requests only from specific hosts, Uncomment the below line.
-			//if (customConfig.getAllowedHosts().contains(client)) {
-			if (cramerVersion.isEmpty() || cramerVersion == null) {
-				cramerVersion = HotfixviewerApplication.distinctCramerVersion;
-			}
-			if (module.isEmpty() || module == null) {
-				module = HotfixviewerApplication.distinctModules;
-			}
 
-			
-			List<ECPLog> ecp_list = ecpService.getResultByFields(ecpNo, description, cramerVersion, latestEcp, requestor,
-					fixedBy, module, caseOrCrNo, filesModifiedInPerforce, filesReleasedToCustomer, rolledIntoVersion,
-					specificFunc, page_no, page_size);
-			
-			HttpHeaders headers = new HttpHeaders();
-			headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, customConfig.getHeader_acao());
-			
-			ECPLogResponseObject ro = new ECPLogResponseObject();
-			ro.setCount(ecp_list.size());
-			ro.setRecords(ecp_list);
-			return ResponseEntity.ok().headers(headers).body(ro);
-
+		if (cramerVersion.isEmpty() || cramerVersion == null) {
+			cramerVersion = HotfixviewerApplication.distinctCramerVersion;
+		}
+		if (module.isEmpty() || module == null) {
+			module = HotfixviewerApplication.distinctModules;
 		}
 
-		return new ResponseEntity<ECPLogResponseObject>(HttpStatus.UNAUTHORIZED);
+		
+		List<ECPLog> ecp_list = ecpService.getResultByFields(ecpNo, description, cramerVersion, latestEcp, requestor,
+				fixedBy, module, caseOrCrNo, filesModifiedInPerforce, filesReleasedToCustomer, rolledIntoVersion,
+				specificFunc, page_no, page_size);
+		
+		HttpHeaders headers = new HttpHeaders();
+		headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, customConfig.getHeader_acao());
+		
+		ECPLogResponseObject ro = new ECPLogResponseObject();
+		ro.setCount(ecp_list.size());
+		ro.setRecords(ecp_list);
+		return ResponseEntity.ok().headers(headers).body(ro);
+
+	
+	
 
 	}
 
@@ -151,12 +143,12 @@ public class EcpLogController {
 			HttpServletRequest request,
 			@RequestHeader("Hostname") String clienthost,
 			@RequestHeader("SearchInput") String SearchInput) {
-		String client = request.getRemoteHost();
+		
 		LOG.info("--------------");
 		LOG.info("User:\t"+clienthost);
 		LOG.info("Input:\t"+SearchInput);
 		
-		if (true) {
+
 		//To restrict the requests only from specific hosts, Uncomment the below line.
 		//if (customConfig.getAllowedHosts().contains(client)) {
 			if (cramerVersion.isEmpty() || cramerVersion == null) {
@@ -170,19 +162,11 @@ public class EcpLogController {
 					fixedBy, module, caseOrCrNo, filesModifiedInPerforce, filesReleasedToCustomer, rolledIntoVersion,
 					specificFunc);
 
-			/*HttpHeaders headers = new HttpHeaders();
-			headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, customConfig.getHeader_acao());
-			headers.add(HttpHeaders.ACCEPT_CHARSET, "text/html;charset=utf-8");
-			*/
 			ECPLogResponseObject ro = new ECPLogResponseObject();
 			ro.setCount(ecp_list.size());
 			ro.setRecords(ecp_list);
-			//return ResponseEntity.ok().headers(headers).body(ro);
 			return ResponseEntity.ok().body(ro);
-
-		}
-		return new ResponseEntity<ECPLogResponseObject>(HttpStatus.UNAUTHORIZED);
-
+		
 	}
 
 	/**
@@ -193,62 +177,44 @@ public class EcpLogController {
 	 * @return
 	 * @throws IOException
 	 */
-	/*@RequestMapping(value = "/loadDataInDB", method = RequestMethod.GET)
-	public ResponseEntity<String> loadDataInDB(HttpServletRequest request) throws IOException {
-		String client = request.getRemoteHost();
-		if (customConfig.getAllowedHosts().contains(client)) {
-			long record_count = ecpExcel.mergeExcelDataToDB();
-			if (record_count == 0) {
-				return new ResponseEntity<String>("Operation failed.", HttpStatus.BAD_REQUEST);
-			} else {
-				return new ResponseEntity<String>("Total records stored in DB:" + record_count, HttpStatus.OK);
-			}
-			
-		}
-		return new ResponseEntity<String>(HttpStatus.UNAUTHORIZED);
 
-	}*/
 	
 
 	@RequestMapping(value = "/getUnderlyingHFs", method = RequestMethod.GET)
 	public ResponseEntity<UnderlyingHFResponseObject> getUnderlyingHFs(
 			@RequestParam(value="latestEcp",defaultValue = "-", required=true) String latestEcp,
 			HttpServletRequest request) {
-		String client = request.getRemoteHost();
-		if (true) {
-			//To restrict the requests only from specific hosts, Uncomment the below line.
-			//if (customConfig.getAllowedHosts().contains(client)) {
-			HttpHeaders headers = new HttpHeaders();
-			headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, customConfig.getHeader_acao());
-			
-			Map<Integer, String> map = ecpService.getUnderlyingHF(latestEcp);
-			UnderlyingHFResponseObject ro = new UnderlyingHFResponseObject();
-			ro.setCount(map.size());
-			ro.setRecords(map);
-			
-			return ResponseEntity.ok().headers(headers).body(ro);
 
-		}
-		return new ResponseEntity<UnderlyingHFResponseObject>(HttpStatus.UNAUTHORIZED);
+		//To restrict the requests only from specific hosts, Uncomment the below line.
+		//if (customConfig.getAllowedHosts().contains(client)) {
+		HttpHeaders headers = new HttpHeaders();
+		headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, customConfig.getHeader_acao());
+		
+		Map<Integer, String> map = ecpService.getUnderlyingHF(latestEcp);
+		UnderlyingHFResponseObject ro = new UnderlyingHFResponseObject();
+		ro.setCount(map.size());
+		ro.setRecords(map);
+		
+		return ResponseEntity.ok().headers(headers).body(ro);
+
+	
 
 	}
 	
 	@RequestMapping(value = "/getDistinctCramerVersions", method = RequestMethod.GET)
 	public ResponseEntity<List<String>> getDistinctCramerVersions(
 			HttpServletRequest request) {
-		String client = request.getRemoteHost();
-		if (true) {
-			//To restrict the requests only from specific hosts, Uncomment the below line.
-			//if (customConfig.getAllowedHosts().contains(client)) {
-			HttpHeaders headers = new HttpHeaders();
-			headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, customConfig.getHeader_acao());
-			
-			List<String> result = HotfixviewerApplication.distinctCramerVersion;
-			
-			return ResponseEntity.ok().headers(headers).body(result);
 
-		}
-		return new ResponseEntity<List<String>>(HttpStatus.UNAUTHORIZED);
+		//To restrict the requests only from specific hosts, Uncomment the below line.
+		//if (customConfig.getAllowedHosts().contains(client)) {
+		HttpHeaders headers = new HttpHeaders();
+		headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, customConfig.getHeader_acao());
+		
+		List<String> result = HotfixviewerApplication.distinctCramerVersion;
+		
+		return ResponseEntity.ok().headers(headers).body(result);
+
+	
 
 	}
 	
@@ -261,19 +227,17 @@ public class EcpLogController {
 	@RequestMapping(value = "/getDistinctModules", method = RequestMethod.GET)
 	public ResponseEntity<List<String>> getDistinctModules(
 			HttpServletRequest request) {
-		String client = request.getRemoteHost();
-		if (true) {
-			//To restrict the requests only from specific hosts, Uncomment the below line.
-			//if (customConfig.getAllowedHosts().contains(client)) {
-			HttpHeaders headers = new HttpHeaders();
-			headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, customConfig.getHeader_acao());
-			
-			List<String> result = HotfixviewerApplication.distinctModules;
-			
-			return ResponseEntity.ok().headers(headers).body(result);
 
-		}
-		return new ResponseEntity<List<String>>(HttpStatus.UNAUTHORIZED);
+		//To restrict the requests only from specific hosts, Uncomment the below line.
+		//if (customConfig.getAllowedHosts().contains(client)) {
+		HttpHeaders headers = new HttpHeaders();
+		headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, customConfig.getHeader_acao());
+		
+		List<String> result = HotfixviewerApplication.distinctModules;
+		
+		return ResponseEntity.ok().headers(headers).body(result);
+
+	
 
 	}
 

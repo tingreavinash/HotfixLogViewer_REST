@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 
-@Document("UserSearchHistory")
+@Document("UserDetails")
 public class UserDetails {
 	private Date date;
 	private String requestPath;

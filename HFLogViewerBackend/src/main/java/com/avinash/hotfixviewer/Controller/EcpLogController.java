@@ -46,7 +46,7 @@ public class EcpLogController {
 	@Autowired
 	private YAMLConfig customConfig;
 	@Autowired
-	private DatabaseLogHandler dbhistoryService;
+	private DatabaseLogHandler dbHandler;
 
 	/**
 	 * REST endpoint for getting "Pageable" results matching below parameters.
@@ -197,13 +197,16 @@ public class EcpLogController {
 		try {
 			InetAddress ip = InetAddress.getByName(httpRequest.getRemoteAddr());
 			String backendHost = ip.getHostName();
-			UserDetails userSearch = new UserDetails();
-			userSearch.setDate(new Date());
-			userSearch.setSearchInput(searchInput);
-			userSearch.setBackendHost(backendHost);
-			userSearch.setClientHost(clienthost);
-			userSearch.setRequestPath(requestName);
 			
+			UserDetails userDetails = new UserDetails();
+			userDetails.setDate(new Date());
+			userDetails.setSearchInput(searchInput);
+			userDetails.setBackendHost(backendHost);
+			userDetails.setClientHost(clienthost);
+			userDetails.setRequestPath(requestName);
+			
+			dbHandler.addUserDetails(userDetails);
+			LOG.info("\nSaved user details to database.");
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 			LOG.warn("Exception occurred while logging to database.");
@@ -256,8 +259,16 @@ public class EcpLogController {
 
 	@RequestMapping(value = "/getSummary", method = RequestMethod.GET)
 	public HotfixSummary getDatabaseSummary() {
-		HotfixSummary summary = dbhistoryService.getSummary();
+		HotfixSummary summary = dbHandler.getSummary();
 		return summary;
+	}
+	
+	@RequestMapping(value = "/getUserDetails", method = RequestMethod.GET)
+	public List<UserDetails> getUserDetails(
+			@RequestParam(value = "hostname", defaultValue = "--", required = false) String hostname) {
+
+		List<UserDetails> userDetails = dbHandler.getUserDetails(hostname);
+		return userDetails;
 	}
 
 	@RequestMapping(value = "/getDistinctModules", method = RequestMethod.GET)

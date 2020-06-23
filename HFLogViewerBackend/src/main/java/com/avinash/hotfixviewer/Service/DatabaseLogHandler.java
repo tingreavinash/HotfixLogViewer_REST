@@ -1,5 +1,7 @@
 package com.avinash.hotfixviewer.Service;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,11 @@ public class DatabaseLogHandler {
 	
 	public UserDetails addUserDetails(UserDetails userDetails) {
 		return userDetailsRepo.save(userDetails);
+	}
+	
+	public List<UserDetails> getUserDetails(String hostname){
+		hostname = ".*"+hostname+".*";
+		return userDetailsRepo.findByClientHost(hostname);
 	}
 	
 	public HotfixSummary addSummary(HotfixSummary dbhistory) {

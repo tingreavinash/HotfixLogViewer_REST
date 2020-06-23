@@ -6,7 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document("DatabaseHistory")
-public class DBHistory {
+public class HotfixSummary {
 	
 	private Date databaseCreatedAt;
 	private long totalHotfixes;

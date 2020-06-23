@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.avinash.hotfixviewer.Model.DBHistory;
+import com.avinash.hotfixviewer.Model.HotfixSummary;
 import com.avinash.hotfixviewer.Model.ECPLog;
 import com.avinash.hotfixviewer.Model.YAMLConfig;
 import com.monitorjbl.xlsx.StreamingReader;
@@ -41,7 +41,7 @@ public class ECPFileHandler {
 	@Autowired
 	private ECPLogService ecpService;
 	@Autowired
-	private DBHistoryService dbhistoryService;
+	private DatabaseLogHandler dbhistoryService;
 	@Autowired
 	public YAMLConfig customConfig;
 
@@ -109,17 +109,17 @@ public class ECPFileHandler {
 	private void saveSummaryInDB() {
 		
 		long oldRecords =0;
-		if (dbhistoryService.getLatestSummary() !=null) {
-			DBHistory oldSummary =dbhistoryService.getLatestSummary();
+		if (dbhistoryService.getSummary() !=null) {
+			HotfixSummary oldSummary =dbhistoryService.getSummary();
 			oldRecords=oldSummary.getTotalHotfixes();	
 		}
 		 
 		
-		DBHistory summary = new DBHistory();
+		HotfixSummary summary = new HotfixSummary();
 		summary.setDatabaseCreatedAt(new Date());
 		summary.setNewlyAddedHotfixes(ecpService.getCountOfHotfixes() - oldRecords);
 		summary.setTotalHotfixes(ecpService.getCountOfHotfixes());
-		dbhistoryService.addDBHistory(summary);
+		dbhistoryService.addSummary(summary);
 		LOG.info("Summary updated in DB !");
 		
 	}

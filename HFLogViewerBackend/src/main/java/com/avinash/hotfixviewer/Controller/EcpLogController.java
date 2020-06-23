@@ -5,6 +5,10 @@
 package com.avinash.hotfixviewer.Controller;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -22,32 +26,33 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.avinash.hotfixviewer.HotfixviewerApplication;
-import com.avinash.hotfixviewer.Model.DBHistory;
+import com.avinash.hotfixviewer.Model.HotfixSummary;
 import com.avinash.hotfixviewer.Model.ECPLog;
 import com.avinash.hotfixviewer.Model.ECPLogResponseObject;
 import com.avinash.hotfixviewer.Model.UnderlyingHFResponseObject;
+import com.avinash.hotfixviewer.Model.UserDetails;
 import com.avinash.hotfixviewer.Model.YAMLConfig;
-import com.avinash.hotfixviewer.Service.DBHistoryService;
+import com.avinash.hotfixviewer.Service.DatabaseLogHandler;
 import com.avinash.hotfixviewer.Service.ECPLogService;
-
 
 @RestController
 @RequestMapping("/HFLogViewer")
 public class EcpLogController {
 	private static final Logger LOG = LoggerFactory.getLogger(EcpLogController.class);
 
-	
 	@Autowired
 	private ECPLogService ecpService;
-	
+
 	@Autowired
 	private YAMLConfig customConfig;
 	@Autowired
-	private DBHistoryService dbhistoryService;
+	private DatabaseLogHandler dbhistoryService;
+
 	/**
 	 * REST endpoint for getting "Pageable" results matching below parameters.
-	 * @param page_no (mandatory)
-	 * @param page_size (mandatory)
+	 * 
+	 * @param page_no                 (mandatory)
+	 * @param page_size               (mandatory)
 	 * @param ecpNo
 	 * @param description
 	 * @param cramerVersion
@@ -65,8 +70,8 @@ public class EcpLogController {
 	 */
 	@RequestMapping(value = "/getPageableResult", method = RequestMethod.GET)
 	public ResponseEntity<ECPLogResponseObject> getPageableResult(
-			@RequestParam(value= "page_no", required = true) int page_no,
-			@RequestParam(value= "page_size", required = true) int page_size,
+			@RequestParam(value = "page_no", required = true) int page_no,
+			@RequestParam(value = "page_size", required = true) int page_size,
 			@RequestParam(value = "ecpNo", defaultValue = "", required = false) String ecpNo,
 			@RequestParam(value = "description", defaultValue = "", required = false) String description,
 			@RequestParam(value = "cramerVersion", defaultValue = "", required = false) List<String> cramerVersion,
@@ -79,7 +84,24 @@ public class EcpLogController {
 			@RequestParam(value = "filesReleasedToCustomer", defaultValue = "", required = false) String filesReleasedToCustomer,
 			@RequestParam(value = "rolledIntoVersion", defaultValue = "", required = false) String rolledIntoVersion,
 			@RequestParam(value = "specificFunc", defaultValue = "", required = false) String specificFunc,
-			HttpServletRequest request) {
+			HttpServletRequest request, @RequestHeader("Hostname") String clienthost) {
+		
+		List<String> requestInput = new ArrayList<String>();
+		requestInput.add("pageNo="+page_no);
+		requestInput.add("pageSize="+page_size);
+		requestInput.add("ecpNo="+ecpNo);
+		requestInput.add("description="+description);
+		requestInput.add("latestEcp="+latestEcp);
+		requestInput.add("requestor="+requestor);
+		requestInput.add("fixedBy="+fixedBy);
+		requestInput.add("caseOrCRNo="+caseOrCrNo);
+		requestInput.add("filesModifiedInPerforce="+filesModifiedInPerforce);
+		requestInput.add("filesReleasedToCustomer="+filesReleasedToCustomer);
+		requestInput.add("specificFunc="+specificFunc);
+		requestInput.add("module="+module);
+		requestInput.add("cramerVersion="+cramerVersion);
+		
+		logToDatabase(request, clienthost, requestInput, "/getPageableResult");
 
 
 		if (cramerVersion.isEmpty() || cramerVersion == null) {
@@ -89,27 +111,23 @@ public class EcpLogController {
 			module = HotfixviewerApplication.distinctModules;
 		}
 
-		
 		List<ECPLog> ecp_list = ecpService.getResultByFields(ecpNo, description, cramerVersion, latestEcp, requestor,
 				fixedBy, module, caseOrCrNo, filesModifiedInPerforce, filesReleasedToCustomer, rolledIntoVersion,
 				specificFunc, page_no, page_size);
-		
+
 		HttpHeaders headers = new HttpHeaders();
 		headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, customConfig.getHeader_acao());
-		
+
 		ECPLogResponseObject ro = new ECPLogResponseObject();
 		ro.setCount(ecp_list.size());
 		ro.setRecords(ecp_list);
 		return ResponseEntity.ok().headers(headers).body(ro);
 
-	
-	
-
 	}
 
-	
 	/**
 	 * REST endpoint for getting "all" results matching below parameters.
+	 * 
 	 * @param ecpNo
 	 * @param description
 	 * @param cramerVersion
@@ -122,7 +140,7 @@ public class EcpLogController {
 	 * @param filesReleasedToCustomer
 	 * @param rolledIntoVersion
 	 * @param specificFunc
-	 * @param request
+	 * @param httpRequest
 	 * @return
 	 */
 	@RequestMapping(value = "/getAllResults", method = RequestMethod.GET)
@@ -139,106 +157,121 @@ public class EcpLogController {
 			@RequestParam(value = "filesReleasedToCustomer", defaultValue = "", required = false) String filesReleasedToCustomer,
 			@RequestParam(value = "rolledIntoVersion", defaultValue = "", required = false) String rolledIntoVersion,
 			@RequestParam(value = "specificFunc", defaultValue = "", required = false) String specificFunc,
-			HttpServletRequest request,
-			@RequestHeader("Hostname") String clienthost,
-			@RequestHeader("SearchInput") String SearchInput) {
+			HttpServletRequest httpRequest, @RequestHeader("Hostname") String clienthost) {
 		
-		LOG.info("--------------");
-		LOG.info("User:\t"+clienthost);
-		LOG.info("Input:\t"+SearchInput);
+		List<String> requestInput = new ArrayList<String>();
+		requestInput.add("ecpNo="+ecpNo);
+		requestInput.add("description="+description);
+		requestInput.add("latestEcp="+latestEcp);
+		requestInput.add("requestor="+requestor);
+		requestInput.add("fixedBy="+fixedBy);
+		requestInput.add("caseOrCRNo="+caseOrCrNo);
+		requestInput.add("filesModifiedInPerforce="+filesModifiedInPerforce);
+		requestInput.add("filesReleasedToCustomer="+filesReleasedToCustomer);
+		requestInput.add("specificFunc="+specificFunc);
+		requestInput.add("module="+module);
+		requestInput.add("cramerVersion="+cramerVersion);
 		
+		logToDatabase(httpRequest, clienthost, requestInput, "/getAllResults");
+		
+		if (cramerVersion.isEmpty() || cramerVersion == null) {
+			cramerVersion = HotfixviewerApplication.distinctCramerVersion;
+		}
+		if (module.isEmpty()) {
+			module = HotfixviewerApplication.distinctModules;
+		}
 
-		//To restrict the requests only from specific hosts, Uncomment the below line.
-		//if (customConfig.getAllowedHosts().contains(client)) {
-			if (cramerVersion.isEmpty() || cramerVersion == null) {
-				cramerVersion = HotfixviewerApplication.distinctCramerVersion;
-			}
-			if (module.isEmpty()) {
-				module = HotfixviewerApplication.distinctModules;
-			}
+		List<ECPLog> ecp_list = ecpService.getResultByFields(ecpNo, description, cramerVersion, latestEcp, requestor,
+				fixedBy, module, caseOrCrNo, filesModifiedInPerforce, filesReleasedToCustomer, rolledIntoVersion,
+				specificFunc);
+
+		ECPLogResponseObject ro = new ECPLogResponseObject();
+		ro.setCount(ecp_list.size());
+		ro.setRecords(ecp_list);
+		return ResponseEntity.ok().body(ro);
+
+	}
+	
+	private void logToDatabase(HttpServletRequest httpRequest, String clienthost, List<String> searchInput, String requestName ) {
+		
+		try {
+			InetAddress ip = InetAddress.getByName(httpRequest.getRemoteAddr());
+			String backendHost = ip.getHostName();
+			UserDetails userSearch = new UserDetails();
+			userSearch.setDate(new Date());
+			userSearch.setSearchInput(searchInput);
+			userSearch.setBackendHost(backendHost);
+			userSearch.setClientHost(clienthost);
+			userSearch.setRequestPath(requestName);
 			
-			List<ECPLog> ecp_list = ecpService.getResultByFields(ecpNo, description, cramerVersion, latestEcp, requestor,
-					fixedBy, module, caseOrCrNo, filesModifiedInPerforce, filesReleasedToCustomer, rolledIntoVersion,
-					specificFunc);
-
-			ECPLogResponseObject ro = new ECPLogResponseObject();
-			ro.setCount(ecp_list.size());
-			ro.setRecords(ecp_list);
-			return ResponseEntity.ok().body(ro);
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+			LOG.warn("Exception occurred while logging to database.");
+		}
 		
+
 	}
 
 	/**
-	 * REST endpoint for storing records from excel into DB.
-	 * It will delete existing records and add new records.
+	 * REST endpoint for storing records from excel into DB. It will delete existing
+	 * records and add new records.
 	 * 
 	 * @param request
 	 * @return
 	 * @throws IOException
 	 */
 
-	
-
 	@RequestMapping(value = "/getUnderlyingHFs", method = RequestMethod.GET)
 	public ResponseEntity<UnderlyingHFResponseObject> getUnderlyingHFs(
-			@RequestParam(value="latestEcp",defaultValue = "-", required=true) String latestEcp,
+			@RequestParam(value = "latestEcp", defaultValue = "-", required = true) String latestEcp,
 			HttpServletRequest request) {
 
-		//To restrict the requests only from specific hosts, Uncomment the below line.
-		//if (customConfig.getAllowedHosts().contains(client)) {
+		// To restrict the requests only from specific hosts, Uncomment the below line.
+		// if (customConfig.getAllowedHosts().contains(client)) {
 		HttpHeaders headers = new HttpHeaders();
 		headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, customConfig.getHeader_acao());
-		
+
 		Map<Integer, String> map = ecpService.getUnderlyingHF(latestEcp);
 		UnderlyingHFResponseObject ro = new UnderlyingHFResponseObject();
 		ro.setCount(map.size());
 		ro.setRecords(map);
-		
+
 		return ResponseEntity.ok().headers(headers).body(ro);
 
-	
-
 	}
-	
+
 	@RequestMapping(value = "/getDistinctCramerVersions", method = RequestMethod.GET)
-	public ResponseEntity<List<String>> getDistinctCramerVersions(
-			HttpServletRequest request) {
+	public ResponseEntity<List<String>> getDistinctCramerVersions(HttpServletRequest request) {
 
-		//To restrict the requests only from specific hosts, Uncomment the below line.
-		//if (customConfig.getAllowedHosts().contains(client)) {
+		// To restrict the requests only from specific hosts, Uncomment the below line.
+		// if (customConfig.getAllowedHosts().contains(client)) {
 		HttpHeaders headers = new HttpHeaders();
 		headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, customConfig.getHeader_acao());
-		
+
 		List<String> result = HotfixviewerApplication.distinctCramerVersion;
-		
+
 		return ResponseEntity.ok().headers(headers).body(result);
 
-	
+	}
 
+	@RequestMapping(value = "/getSummary", method = RequestMethod.GET)
+	public HotfixSummary getDatabaseSummary() {
+		HotfixSummary summary = dbhistoryService.getSummary();
+		return summary;
 	}
-	
-	@RequestMapping(value="/getSummary", method=RequestMethod.GET)
-	public DBHistory getDatabaseSummary() {
-		DBHistory summary = dbhistoryService.getLatestSummary();
-		return summary ;
-	}
-	
+
 	@RequestMapping(value = "/getDistinctModules", method = RequestMethod.GET)
-	public ResponseEntity<List<String>> getDistinctModules(
-			HttpServletRequest request) {
+	public ResponseEntity<List<String>> getDistinctModules(HttpServletRequest request) {
 
-		//To restrict the requests only from specific hosts, Uncomment the below line.
-		//if (customConfig.getAllowedHosts().contains(client)) {
+		// To restrict the requests only from specific hosts, Uncomment the below line.
+		// if (customConfig.getAllowedHosts().contains(client)) {
 		HttpHeaders headers = new HttpHeaders();
 		headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, customConfig.getHeader_acao());
-		
+
 		List<String> result = HotfixviewerApplication.distinctModules;
-		
+
 		return ResponseEntity.ok().headers(headers).body(result);
 
-	
-
 	}
-
 
 }

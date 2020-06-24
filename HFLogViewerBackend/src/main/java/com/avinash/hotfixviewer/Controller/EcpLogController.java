@@ -84,7 +84,9 @@ public class EcpLogController {
 			@RequestParam(value = "filesReleasedToCustomer", defaultValue = "", required = false) String filesReleasedToCustomer,
 			@RequestParam(value = "rolledIntoVersion", defaultValue = "", required = false) String rolledIntoVersion,
 			@RequestParam(value = "specificFunc", defaultValue = "", required = false) String specificFunc,
-			HttpServletRequest request, @RequestHeader("Hostname") String clienthost) {
+			HttpServletRequest request, @RequestHeader("Hostname") String hostname,
+			@RequestHeader("HostAddress") String HostAddress,
+			@RequestHeader("NTNET") String ntnet) {
 		
 		List<String> requestInput = new ArrayList<String>();
 		requestInput.add("pageNo="+page_no);
@@ -101,8 +103,8 @@ public class EcpLogController {
 		requestInput.add("module="+module);
 		requestInput.add("cramerVersion="+cramerVersion);
 		
-		logToDatabase(request, clienthost, requestInput, "/getPageableResult");
-
+		logToDatabase(hostname, HostAddress, ntnet, requestInput, "/getPageableResult");
+		
 
 		if (cramerVersion.isEmpty() || cramerVersion == null) {
 			cramerVersion = HotfixviewerApplication.distinctCramerVersion;
@@ -157,8 +159,11 @@ public class EcpLogController {
 			@RequestParam(value = "filesReleasedToCustomer", defaultValue = "", required = false) String filesReleasedToCustomer,
 			@RequestParam(value = "rolledIntoVersion", defaultValue = "", required = false) String rolledIntoVersion,
 			@RequestParam(value = "specificFunc", defaultValue = "", required = false) String specificFunc,
-			HttpServletRequest httpRequest, @RequestHeader("Hostname") String clienthost) {
+			HttpServletRequest httpRequest, @RequestHeader("Hostname") String hostname,
+			@RequestHeader("HostAddress") String HostAddress,
+			@RequestHeader("NTNET") String ntnet) {
 		
+
 		List<String> requestInput = new ArrayList<String>();
 		requestInput.add("ecpNo="+ecpNo);
 		requestInput.add("description="+description);
@@ -172,7 +177,7 @@ public class EcpLogController {
 		requestInput.add("module="+module);
 		requestInput.add("cramerVersion="+cramerVersion);
 		
-		logToDatabase(httpRequest, clienthost, requestInput, "/getAllResults");
+		logToDatabase(hostname, HostAddress, ntnet, requestInput, "/getAllResults");
 		
 		if (cramerVersion.isEmpty() || cramerVersion == null) {
 			cramerVersion = HotfixviewerApplication.distinctCramerVersion;
@@ -192,22 +197,23 @@ public class EcpLogController {
 
 	}
 	
-	private void logToDatabase(HttpServletRequest httpRequest, String clienthost, List<String> searchInput, String requestName ) {
+	private void logToDatabase(String hostname, String hostaddress, String ntnet,
+			List<String> searchInput, String requestName ) {
 		
 		try {
-			InetAddress ip = InetAddress.getByName(httpRequest.getRemoteAddr());
-			String backendHost = ip.getHostName();
 			
 			UserDetails userDetails = new UserDetails();
 			userDetails.setDate(new Date());
-			userDetails.setSearchInput(searchInput);
-			userDetails.setBackendHost(backendHost);
-			userDetails.setClientHost(clienthost);
 			userDetails.setRequestPath(requestName);
+			userDetails.setSearchInput(searchInput);
+			userDetails.setHostaddress(hostaddress);
+			userDetails.setHostname(hostname);
+			userDetails.setNtnet(ntnet);
+			
 			
 			dbHandler.addUserDetails(userDetails);
 			LOG.info("\nSaved user details to database.");
-		} catch (UnknownHostException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			LOG.warn("Exception occurred while logging to database.");
 		}
@@ -265,9 +271,9 @@ public class EcpLogController {
 	
 	@RequestMapping(value = "/getUserDetails", method = RequestMethod.GET)
 	public List<UserDetails> getUserDetails(
-			@RequestParam(value = "hostname", defaultValue = "--", required = false) String hostname) {
+			@RequestParam(value = "ntnet", defaultValue = "--", required = false) String ntnet) {
 
-		List<UserDetails> userDetails = dbHandler.getUserDetails(hostname);
+		List<UserDetails> userDetails = dbHandler.getUserDetails(ntnet);
 		return userDetails;
 	}
 

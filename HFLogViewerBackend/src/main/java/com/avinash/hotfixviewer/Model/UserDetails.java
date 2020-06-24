@@ -10,10 +10,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class UserDetails {
 	private Date date;
 	private String requestPath;
-	private String clientHost;
-	private String backendHost;
-	private List<String> searchInput;
+	private String ntnet;
+	private String hostname;
+	private String hostaddress;
 	
+	private List<String> searchInput;
 	public Date getDate() {
 		return date;
 	}
@@ -26,17 +27,23 @@ public class UserDetails {
 	public void setRequestPath(String requestPath) {
 		this.requestPath = requestPath;
 	}
-	public String getClientHost() {
-		return clientHost;
+	public String getNtnet() {
+		return ntnet;
 	}
-	public void setClientHost(String clientHost) {
-		this.clientHost = clientHost;
+	public void setNtnet(String ntnet) {
+		this.ntnet = ntnet;
 	}
-	public String getBackendHost() {
-		return backendHost;
+	public String getHostname() {
+		return hostname;
 	}
-	public void setBackendHost(String backendHost) {
-		this.backendHost = backendHost;
+	public void setHostname(String hostname) {
+		this.hostname = hostname;
+	}
+	public String getHostaddress() {
+		return hostaddress;
+	}
+	public void setHostaddress(String hostaddress) {
+		this.hostaddress = hostaddress;
 	}
 	public List<String> getSearchInput() {
 		return searchInput;
@@ -44,6 +51,8 @@ public class UserDetails {
 	public void setSearchInput(List<String> searchInput) {
 		this.searchInput = searchInput;
 	}
+	
+	
 	
 	
 }

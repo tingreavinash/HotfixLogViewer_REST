@@ -72,7 +72,7 @@ public class ECPFileHandler {
 			workbook = StreamingReader.builder().rowCacheSize(100).bufferSize(4096).open(fis);
 
 			sheet = workbook.getSheetAt(2);
-			LOG.info("Data copy started: " + new Date());
+			LOG.info("Data loading started: " + new Date());
 
 			for (Row r : sheet) {
 				if (r.getRowNum() >= startRow && r.getRowNum() < endRow) {
@@ -86,9 +86,8 @@ public class ECPFileHandler {
 					row_values.clear();
 				}
 			}
+			LOG.info("Data loading finished: " + new Date());
 			saveSummaryInDB();
-			LOG.info("Data copy finished: " + new Date());
-			
 		} catch (FileNotFoundException ex) {
 			LOG.error("File not found !!\n" + ex.getMessage());
 		} catch (Exception ex) {

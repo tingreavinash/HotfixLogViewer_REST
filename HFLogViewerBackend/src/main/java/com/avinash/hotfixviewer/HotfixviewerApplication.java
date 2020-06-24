@@ -20,6 +20,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import com.avinash.hotfixviewer.Controller.EcpLogController;
+import com.avinash.hotfixviewer.Model.HotfixSummary;
 import com.avinash.hotfixviewer.Service.ECPFileHandler;
 import com.avinash.hotfixviewer.Service.ECPLogService;
 
@@ -36,6 +38,7 @@ public class HotfixviewerApplication implements CommandLineRunner {
 	
 	@Autowired ECPLogService ecpService;
 	@Autowired ECPFileHandler ecpHandler;
+	@Autowired EcpLogController ecpController;
 	public static void main(String[] args) {
 		SpringApplication.run(HotfixviewerApplication.class, args);
 	}
@@ -58,11 +61,17 @@ public class HotfixviewerApplication implements CommandLineRunner {
 	
 	@Override
     public void run (String... args) throws IOException {
-		LOG.info("\n\n\n------------>> Hotfix Application Started <<------------");
+		LOG.info("\n\n\n");
+		LOG.info("============ Hotfix Application Started ============");
 
 		long total_records_inserted = ecpHandler.mergeExcelDataToDB();
 		if (total_records_inserted != 0) {
-			LOG.info("Data loaded in DB. Records inserted: "+total_records_inserted);
+			LOG.info("Records inserted: "+total_records_inserted+"\n");
+			LOG.info("====== Database Summary ======");
+			HotfixSummary hfSummary= ecpController.getDatabaseSummary();
+			LOG.info("Total hotfixes in DB: "+hfSummary.getTotalHotfixes());
+			LOG.info("Newly added hotfixes: "+hfSummary.getNewlyAddedHotfixes());
+			
 		}else {
 			LOG.warn("Operation failed.");
 		}
@@ -76,7 +85,7 @@ public class HotfixviewerApplication implements CommandLineRunner {
 		}
 		distinctCramerVersion.addAll(version_set);
 		distinctModules.addAll(module_set);
-		LOG.info("Retrieved distinct cramer versions and modules.");
+		
 		
 	}
 

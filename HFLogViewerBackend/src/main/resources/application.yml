@@ -1,6 +1,33 @@
 excelFilePath: C:\Work\Projects\Hotfix Viewer Spring\Executables\Excel File\ECPLog.xlsm
-#Deprecated Property
-allowedHosts: avinasht01,0:0:0:0:0:0:0:1,localhost,127.0.0.1
+application-description: REST application for accessing Hotfix data from Database.
+application-version: v3
 
-#ACCESS_CONTROL_ALLOW_ORIGIN (Deprecated property)
-header_acao: http://localhost:80
+
+spring:  profiles:    active: dev  application:    name: HFLogViewer_REST
+---
+spring:  profiles: dev  data:    mongodb:      authentication-database: xyz_db      username: xyz
+      password: xyz
+      database: xyz_db
+      port: 27017
+      host: localhost
+server:  port: 7777
+  
+---
+spring:
+  profiles: prod
+  data:
+    mongodb:
+      authentication-database: prod_xyz
+      username: xyz_prod
+      password: xyz_prod
+      database: prod_xyz
+      port: 27017
+      host: localhost
+server:
+  port: 4569
+  
+
+---
+logging:  file:    name: AplicationBackend.log
+  pattern:    file: "%d %p %c{1.} [%t] %m%n"
+    console: "%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"

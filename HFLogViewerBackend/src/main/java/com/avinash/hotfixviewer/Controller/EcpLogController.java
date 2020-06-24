@@ -163,7 +163,6 @@ public class EcpLogController {
 			@RequestHeader("HostAddress") String HostAddress,
 			@RequestHeader("NTNET") String ntnet) {
 		
-
 		List<String> requestInput = new ArrayList<String>();
 		requestInput.add("ecpNo="+ecpNo);
 		requestInput.add("description="+description);

@@ -30,6 +30,5 @@ build/
 
 ### VS Code ###
 .vscode/
-/AplicationBackend.log.2020-06-21.0.gz
-/AplicationBackend.log.2020-06-22.0.gz
-/AplicationBackend.log
+/*.gz
+/*.log

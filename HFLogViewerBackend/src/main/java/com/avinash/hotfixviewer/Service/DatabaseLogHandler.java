@@ -25,9 +25,9 @@ public class DatabaseLogHandler {
 		return userDetailsRepo.save(userDetails);
 	}
 	
-	public List<UserDetails> getUserDetails(String ntnet){
-		ntnet = ".*"+ntnet+".*";
-		return userDetailsRepo.findByNtnet(ntnet);
+	public List<UserDetails> getUserDetails(String host){
+		host = ".*"+host+".*";
+		return userDetailsRepo.findByHostname(host);
 	}
 	
 	public HotfixSummary addSummary(HotfixSummary dbhistory) {

@@ -9,6 +9,6 @@ import com.avinash.hotfixviewer.Model.UserDetails;
 
 public interface UserDetailsRepository extends MongoRepository<UserDetails, Long> {
 	
-	@Query(value="{ 'ntnet' : { $regex: ?0, $options: 'i' } }", sort="{date : -1}")
-	List<UserDetails> findByNtnet(String ntnet);
+	@Query(value="{ 'hostname' : { $regex: ?0, $options: 'i' } }", sort="{date : -1}")
+	List<UserDetails> findByHostname(String host);
 }

@@ -35,8 +35,15 @@ import com.avinash.hotfixviewer.Model.YAMLConfig;
 import com.avinash.hotfixviewer.Service.DatabaseLogHandler;
 import com.avinash.hotfixviewer.Service.ECPLogService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/HFLogViewer")
+@Tag(name = "Hotfix Search", description = "API for fetching hotfixes")
 public class EcpLogController {
 	private static final Logger LOG = LoggerFactory.getLogger(EcpLogController.class);
 
@@ -145,7 +152,8 @@ public class EcpLogController {
 	 * @param httpRequest
 	 * @return
 	 */
-	@RequestMapping(value = "/getAllResults", method = RequestMethod.GET)
+    @Operation(summary = "Find all hotfixes", description = "Hotfix search with given criteria.", tags = { "Hotfix Search" })
+    @RequestMapping(value = "/getAllResults", method = RequestMethod.GET)
 	public ResponseEntity<ECPLogResponseObject> getAllResults(
 			@RequestParam(value = "ecpNo", defaultValue = "", required = false) String ecpNo,
 			@RequestParam(value = "description", defaultValue = "", required = false) String description,
@@ -159,9 +167,9 @@ public class EcpLogController {
 			@RequestParam(value = "filesReleasedToCustomer", defaultValue = "", required = false) String filesReleasedToCustomer,
 			@RequestParam(value = "rolledIntoVersion", defaultValue = "", required = false) String rolledIntoVersion,
 			@RequestParam(value = "specificFunc", defaultValue = "", required = false) String specificFunc,
-			HttpServletRequest httpRequest, @RequestHeader("Hostname") String hostname,
-			@RequestHeader("HostAddress") String HostAddress,
-			@RequestHeader("NTNET") String ntnet) {
+			HttpServletRequest httpRequest, @RequestHeader(value="Hostname", defaultValue = "disabled", required = false) String hostname,
+			@RequestHeader(value="HostAddress", defaultValue = "disabled", required = false) String HostAddress,
+			@RequestHeader(value="NTNET", defaultValue = "disabled", required = false) String ntnet) {
 		
 		List<String> requestInput = new ArrayList<String>();
 		requestInput.add("ecpNo="+ecpNo);
@@ -270,9 +278,9 @@ public class EcpLogController {
 	
 	@RequestMapping(value = "/getUserDetails", method = RequestMethod.GET)
 	public List<UserDetails> getUserDetails(
-			@RequestParam(value = "ntnet", defaultValue = "--", required = false) String ntnet) {
+			@RequestParam(value = "host", defaultValue = "--", required = false) String host) {
 
-		List<UserDetails> userDetails = dbHandler.getUserDetails(ntnet);
+		List<UserDetails> userDetails = dbHandler.getUserDetails(host);
 		return userDetails;
 	}
 

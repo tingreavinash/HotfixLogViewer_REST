@@ -172,17 +172,19 @@ public class EcpLogController {
 			@RequestHeader(value="NTNET", defaultValue = "disabled", required = false) String ntnet) {
 		
 		List<String> requestInput = new ArrayList<String>();
-		requestInput.add("ecpNo="+ecpNo);
-		requestInput.add("description="+description);
-		requestInput.add("latestEcp="+latestEcp);
-		requestInput.add("requestor="+requestor);
-		requestInput.add("fixedBy="+fixedBy);
-		requestInput.add("caseOrCRNo="+caseOrCrNo);
-		requestInput.add("filesModifiedInPerforce="+filesModifiedInPerforce);
-		requestInput.add("filesReleasedToCustomer="+filesReleasedToCustomer);
-		requestInput.add("specificFunc="+specificFunc);
-		requestInput.add("module="+module);
-		requestInput.add("cramerVersion="+cramerVersion);
+		
+		if(ecpNo.length() > 0) requestInput.add("Hotfix No: "+ecpNo+", ");
+		if(latestEcp.length() > 0) requestInput.add("Latest Hotfix: "+latestEcp+", ");
+		if(description.length() > 0) requestInput.add("Description: "+description+", ");
+		if(cramerVersion.size() >0) requestInput.add("Versions: "+cramerVersion+", ");
+		if(requestor.length() > 0) requestInput.add("Requested by: "+requestor+", ");
+		if(fixedBy.length() > 0) requestInput.add("Fixed by: "+fixedBy+", ");
+		if(module.size() > 0) requestInput.add("Modules: "+module+", ");
+		if(caseOrCrNo.length() > 0) requestInput.add("Case or CR No: "+caseOrCrNo+", ");
+		if(filesModifiedInPerforce.length() > 0) requestInput.add("Files modified: "+filesModifiedInPerforce+", ");
+		if(filesReleasedToCustomer.length() > 0) requestInput.add("Files released: "+filesReleasedToCustomer+", ");
+		if(specificFunc.length() > 0) requestInput.add("Specific function: "+specificFunc+", ");
+
 		
 		logToDatabase(hostname, HostAddress, ntnet, requestInput, "/getAllResults");
 		

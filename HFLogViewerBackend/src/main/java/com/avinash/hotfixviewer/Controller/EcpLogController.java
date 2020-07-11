@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.AsyncContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -171,6 +172,7 @@ public class EcpLogController {
 			@RequestHeader(value="HostAddress", defaultValue = "disabled", required = false) String HostAddress,
 			@RequestHeader(value="NTNET", defaultValue = "disabled", required = false) String ntnet) {
 		
+
 		List<String> requestInput = new ArrayList<String>();
 		
 		if(ecpNo.length() > 0) requestInput.add("Hotfix No: "+ecpNo+", ");

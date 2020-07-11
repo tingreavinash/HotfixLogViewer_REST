@@ -187,8 +187,6 @@ public class EcpLogController {
 		if(filesReleasedToCustomer.length() > 0) requestInput.add("Files released: "+filesReleasedToCustomer+", ");
 		if(specificFunc.length() > 0) requestInput.add("Specific function: "+specificFunc+", ");
 
-		
-		
 		logToDatabase(hostname, HostAddress, ntnet, requestInput, "/getAllResults");
 		
 		if (cramerVersion.isEmpty() || cramerVersion == null) {

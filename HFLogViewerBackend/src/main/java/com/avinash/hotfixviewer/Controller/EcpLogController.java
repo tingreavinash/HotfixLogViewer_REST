@@ -96,6 +96,7 @@ public class EcpLogController {
 			@RequestHeader("HostAddress") String HostAddress,
 			@RequestHeader("NTNET") String ntnet) {
 		
+		LOG.info("Inside pageable request");
 		List<String> requestInput = new ArrayList<String>();
 		requestInput.add("pageNo="+page_no);
 		requestInput.add("pageSize="+page_size);
@@ -187,6 +188,7 @@ public class EcpLogController {
 		if(filesReleasedToCustomer.length() > 0) requestInput.add("Files released: "+filesReleasedToCustomer+", ");
 		if(specificFunc.length() > 0) requestInput.add("Specific function: "+specificFunc+", ");
 
+		
 		
 		logToDatabase(hostname, HostAddress, ntnet, requestInput, "/getAllResults");
 		

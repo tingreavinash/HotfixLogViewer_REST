@@ -95,7 +95,7 @@ public class EcpLogController {
 			HttpServletRequest request, @RequestHeader("Hostname") String hostname,
 			@RequestHeader("HostAddress") String HostAddress,
 			@RequestHeader("NTNET") String ntnet) {
-		
+		LOG.info("Test message");
 		List<String> requestInput = new ArrayList<String>();
 		requestInput.add("pageNo="+page_no);
 		requestInput.add("pageSize="+page_size);

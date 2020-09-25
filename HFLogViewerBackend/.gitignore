@@ -4,6 +4,7 @@ src/main/resources/*
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**
 !**/src/test/**
+bin/
 
 ### STS ###
 .apt_generated

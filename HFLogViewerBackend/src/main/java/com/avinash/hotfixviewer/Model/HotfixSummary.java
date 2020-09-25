@@ -14,6 +14,7 @@ public class HotfixSummary {
 	public Date getDatabaseCreatedAt() {
 		return databaseCreatedAt;
 	}
+	
 	public void setDatabaseCreatedAt(Date databaseCreatedAt) {
 		this.databaseCreatedAt = databaseCreatedAt;
 	}

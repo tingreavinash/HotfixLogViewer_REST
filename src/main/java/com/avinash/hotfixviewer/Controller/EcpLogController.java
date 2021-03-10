@@ -222,7 +222,7 @@ public class EcpLogController {
 			
 			
 			dbHandler.addUserDetails(userDetails);
-			LOG.info("\nSaved user details to database.");
+			LOG.info("Saved user details to database.");
 		} catch (Exception e) {
 			e.printStackTrace();
 			LOG.warn("Exception occurred while logging to database.");

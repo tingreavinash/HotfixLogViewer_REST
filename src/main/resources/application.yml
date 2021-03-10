@@ -2,15 +2,27 @@ excelFilePath: C:\Work\Projects\Hotfix Viewer Spring\Executables\Excel File\ECPL
 application-description: REST application for accessing Hotfix data from Database.
 application-version: v3
 
+app:
+  load_data_on_init: false
 
-spring:  profiles:    active: dev  application:    name: HFLogViewer_REST
+
+spring:
+  profiles:
+    active: dev
+  application:
+    name: HFLogViewer_REST
 ---
-spring:  profiles: dev  data:    mongodb:      authentication-database: xyz_db      username: xyz
-      password: xyz
-      database: xyz_db
-      port: 27017
+spring:
+  data:
+    mongodb:
+      authentication-database: testdb
+      database: testdb
       host: localhost
-server:  port: 7777
+      password: test123
+      port: 27017
+      username: test
+server:
+  port: 7777
   
 ---
 spring:
@@ -28,6 +40,9 @@ server:
   
 
 ---
-logging:  file:    name: AplicationBackend.log
-  pattern:    file: "%d %p %c{1.} [%t] %m%n"
+logging:
+  file:
+    name: AplicationBackend.log
+  pattern:
+    file: "%d %p %c{1.} [%t] %m%n"
     console: "%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"

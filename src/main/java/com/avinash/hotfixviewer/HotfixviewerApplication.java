@@ -6,10 +6,7 @@
 package com.avinash.hotfixviewer;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +36,8 @@ public class HotfixviewerApplication implements CommandLineRunner {
 	@Autowired ECPLogService ecpService;
 	@Autowired ECPFileHandler ecpHandler;
 	@Autowired EcpLogController ecpController;
+
+	@Value("${app.load_data_on_init}") Boolean isLoadDataEnabled;
 	public static void main(String[] args) {
 		SpringApplication.run(HotfixviewerApplication.class, args);
 	}
@@ -64,28 +63,31 @@ public class HotfixviewerApplication implements CommandLineRunner {
 		LOG.info("\n\n\n");
 		LOG.info("============ Hotfix Application Started ============");
 
-		long total_records_inserted = ecpHandler.mergeExcelDataToDB();
-		if (total_records_inserted != 0) {
-			LOG.info("Records inserted: "+total_records_inserted+"\n");
-			LOG.info("====== Database Summary ======");
-			HotfixSummary hfSummary= ecpController.getDatabaseSummary();
-			LOG.info("Total hotfixes in DB: "+hfSummary.getTotalHotfixes());
-			LOG.info("Newly added hotfixes: "+hfSummary.getNewlyAddedHotfixes());
-			
-		}else {
-			LOG.warn("Operation failed.");
+		if(isLoadDataEnabled){
+			long total_records_inserted = ecpHandler.mergeExcelDataToDB();
+			if (total_records_inserted != 0) {
+				LOG.info("Records inserted: "+total_records_inserted+"\n");
+				LOG.info("====== Database Summary ======");
+				HotfixSummary hfSummary= ecpController.getDatabaseSummary();
+				LOG.info("Total hotfixes in DB: "+hfSummary.getTotalHotfixes());
+				LOG.info("Newly added hotfixes: "+hfSummary.getNewlyAddedHotfixes());
+
+			}else {
+				LOG.warn("Operation failed.");
+			}
+			Map<Set<String>, Set<String>> map= ecpService.getDistinctValues();
+
+			Set<String> version_set =null;
+			Set<String> module_set = null;
+			for (Map.Entry<Set<String>, Set<String>> entry: map.entrySet()) {
+				version_set = entry.getKey();
+				module_set = entry.getValue();
+			}
+			distinctCramerVersion.addAll(version_set);
+			distinctModules.addAll(module_set);
 		}
-		Map<Set<String>, Set<String>> map= ecpService.getDistinctValues();
-		
-		Set<String> version_set =null;
-		Set<String> module_set = null;
-		for (Map.Entry<Set<String>, Set<String>> entry: map.entrySet()) {
-			version_set = entry.getKey();
-			module_set = entry.getValue();
-		}
-		distinctCramerVersion.addAll(version_set);
-		distinctModules.addAll(module_set);
-		
+
+
 		
 	}
 

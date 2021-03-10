@@ -13,7 +13,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document("HotfixDetails")
-public class ECPLog implements Comparable{
+public class ECPLog implements Comparable, Cloneable{
 	@Id
 	private long _id;
 	private String cramerVersion;
@@ -440,5 +440,9 @@ public class ECPLog implements Comparable{
 		}
 		
 	}
-	
+
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
 }

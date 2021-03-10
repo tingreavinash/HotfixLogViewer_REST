@@ -8,6 +8,7 @@ package com.avinash.hotfixviewer;
 import java.io.IOException;
 import java.util.*;
 
+import com.avinash.hotfixviewer.Service.DummyClass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,10 +37,13 @@ public class HotfixviewerApplication implements CommandLineRunner {
 	@Autowired ECPLogService ecpService;
 	@Autowired ECPFileHandler ecpHandler;
 	@Autowired EcpLogController ecpController;
+	@Autowired
+	DummyClass dummyObj;
 
 	@Value("${app.load_data_on_init}") Boolean isLoadDataEnabled;
 	public static void main(String[] args) {
 		SpringApplication.run(HotfixviewerApplication.class, args);
+
 	}
 	
 	@Bean
@@ -59,9 +63,11 @@ public class HotfixviewerApplication implements CommandLineRunner {
 	 */
 	
 	@Override
-    public void run (String... args) throws IOException {
+    public void run (String... args) throws IOException, CloneNotSupportedException {
 		LOG.info("\n\n\n");
 		LOG.info("============ Hotfix Application Started ============");
+
+		ecpService.addAllECPRecords(dummyObj.getDummyRecords());
 
 		if(isLoadDataEnabled){
 			long total_records_inserted = ecpHandler.mergeExcelDataToDB();
@@ -75,17 +81,19 @@ public class HotfixviewerApplication implements CommandLineRunner {
 			}else {
 				LOG.warn("Operation failed.");
 			}
-			Map<Set<String>, Set<String>> map= ecpService.getDistinctValues();
 
-			Set<String> version_set =null;
-			Set<String> module_set = null;
-			for (Map.Entry<Set<String>, Set<String>> entry: map.entrySet()) {
-				version_set = entry.getKey();
-				module_set = entry.getValue();
-			}
-			distinctCramerVersion.addAll(version_set);
-			distinctModules.addAll(module_set);
+
 		}
+		Map<Set<String>, Set<String>> map= ecpService.getDistinctValues();
+
+		Set<String> version_set =null;
+		Set<String> module_set = null;
+		for (Map.Entry<Set<String>, Set<String>> entry: map.entrySet()) {
+			version_set = entry.getKey();
+			module_set = entry.getValue();
+		}
+		distinctCramerVersion.addAll(version_set);
+		distinctModules.addAll(module_set);
 
 
 		

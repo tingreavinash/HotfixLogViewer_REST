@@ -3,7 +3,7 @@ application-description: REST application for accessing Hotfix data from Databas
 application-version: v3
 
 app:
-  load_data_on_init: false
+  load_data_from_file: false
 
 
 spring:

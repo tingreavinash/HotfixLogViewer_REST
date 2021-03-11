@@ -5,10 +5,14 @@
 
 package com.avinash.hotfixviewer;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.*;
 
-import com.avinash.hotfixviewer.Service.DummyClass;
+import com.avinash.hotfixviewer.Model.ECPLog;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +30,8 @@ import com.avinash.hotfixviewer.Service.ECPLogService;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
+import org.springframework.core.io.Resource;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @SpringBootApplication
 public class HotfixviewerApplication implements CommandLineRunner {
@@ -37,10 +43,14 @@ public class HotfixviewerApplication implements CommandLineRunner {
 	@Autowired ECPLogService ecpService;
 	@Autowired ECPFileHandler ecpHandler;
 	@Autowired EcpLogController ecpController;
-	@Autowired
-	DummyClass dummyObj;
 
-	@Value("${app.load_data_on_init}") Boolean isLoadDataEnabled;
+	@Value("classpath:data/SampleHotfixData.json")
+	Resource resource;
+
+	@Autowired
+	ObjectMapper objectMapper;
+
+	@Value("${app.load_data_from_file}") Boolean isLoadDataFromFileEnabled;
 	public static void main(String[] args) {
 		SpringApplication.run(HotfixviewerApplication.class, args);
 
@@ -56,34 +66,48 @@ public class HotfixviewerApplication implements CommandLineRunner {
           .termsOfService("http://swagger.io/terms/")
           .license(new License().name("Apache 2.0").url("http://springdoc.org")));
     }
+
+    private void loadSampleData() throws IOException {
+		ecpService.deleteAllRecords();
+		System.out.println("Old records deleted");
+
+		File file = resource.getFile();
+		String hfRecords = new String(Files.readAllBytes(file.toPath()));
+
+		ECPLog[] arr = objectMapper.readValue(hfRecords, ECPLog[].class);
+		List<ECPLog> ecpObjects = Arrays.asList(arr);
+		List<ECPLog> result = ecpService.addAllECPRecords(ecpObjects);
+		System.out.println("Total records inserted: "+result.size());
+	}
 	
 	/**
 	 * This method runs immediately after starting spring boot app.
 	 * It will delete old records from Database and will add all new records from excel into DB.
 	 */
-	
+
 	@Override
     public void run (String... args) throws IOException, CloneNotSupportedException {
 		LOG.info("\n\n\n");
 		LOG.info("============ Hotfix Application Started ============");
 
-		ecpService.addAllECPRecords(dummyObj.getDummyRecords());
 
-		if(isLoadDataEnabled){
+
+		if(isLoadDataFromFileEnabled){
 			long total_records_inserted = ecpHandler.mergeExcelDataToDB();
 			if (total_records_inserted != 0) {
-				LOG.info("Records inserted: "+total_records_inserted+"\n");
-				LOG.info("====== Database Summary ======");
-				HotfixSummary hfSummary= ecpController.getDatabaseSummary();
-				LOG.info("Total hotfixes in DB: "+hfSummary.getTotalHotfixes());
-				LOG.info("Newly added hotfixes: "+hfSummary.getNewlyAddedHotfixes());
-
+				LOG.info("Total records inserted: "+total_records_inserted+"\n");
 			}else {
 				LOG.warn("Operation failed.");
 			}
+			LOG.info("====== Database Summary ======");
+			HotfixSummary hfSummary= ecpController.getDatabaseSummary();
+			LOG.info("Total hotfixes in DB: "+hfSummary.getTotalHotfixes());
+			LOG.info("Newly added hotfixes: "+hfSummary.getNewlyAddedHotfixes());
 
-
+		}else {
+			loadSampleData();
 		}
+
 		Map<Set<String>, Set<String>> map= ecpService.getDistinctValues();
 
 		Set<String> version_set =null;
@@ -92,8 +116,10 @@ public class HotfixviewerApplication implements CommandLineRunner {
 			version_set = entry.getKey();
 			module_set = entry.getValue();
 		}
-		distinctCramerVersion.addAll(version_set);
-		distinctModules.addAll(module_set);
+		if (version_set !=null && module_set !=null){
+			distinctCramerVersion.addAll(version_set);
+			distinctModules.addAll(module_set);
+		}
 
 
 		

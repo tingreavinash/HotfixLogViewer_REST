@@ -151,7 +151,7 @@ public class ECPLogService {
 	 */
 	public List<ECPLog> getAllECP() {
 		if (ecpRepo.findAll().isEmpty())
-			return null;
+			return new ArrayList<ECPLog>();
 		return ecpRepo.findAll();
 	}
 	

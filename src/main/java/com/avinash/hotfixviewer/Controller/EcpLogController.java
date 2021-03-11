@@ -20,7 +20,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -99,10 +98,10 @@ public class EcpLogController {
         logToDatabase(hostname, HostAddress, ntnet, requestInput, "/getPageableResult");
 
 
-        if (cramerVersion.isEmpty() || cramerVersion == null) {
-            cramerVersion = HotfixviewerApplication.distinctCramerVersion;
+        if (cramerVersion.isEmpty()) {
+            cramerVersion = HotfixviewerApplication.distinctVersion;
         }
-        if (module.isEmpty() || module == null) {
+        if (module.isEmpty()) {
             module = HotfixviewerApplication.distinctModules;
         }
 
@@ -174,8 +173,8 @@ public class EcpLogController {
 
         logToDatabase(hostname, HostAddress, ntnet, requestInput, "/getAllResults");
 
-        if (cramerVersion.isEmpty() || cramerVersion == null) {
-            cramerVersion = HotfixviewerApplication.distinctCramerVersion;
+        if (cramerVersion.isEmpty()) {
+            cramerVersion = HotfixviewerApplication.distinctVersion;
         }
         if (module.isEmpty()) {
             module = HotfixviewerApplication.distinctModules;
@@ -219,10 +218,6 @@ public class EcpLogController {
     /**
      * REST endpoint for storing records from excel into DB. It will delete existing
      * records and add new records.
-     *
-     * @param request
-     * @return
-     * @throws IOException
      */
 
     @RequestMapping(value = "/getUnderlyingHFs", method = RequestMethod.GET)
@@ -252,7 +247,7 @@ public class EcpLogController {
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, headerPrefix);
 
-        List<String> result = HotfixviewerApplication.distinctCramerVersion;
+        List<String> result = HotfixviewerApplication.distinctVersion;
 
         return ResponseEntity.ok().headers(headers).body(result);
 
@@ -260,16 +255,14 @@ public class EcpLogController {
 
     @RequestMapping(value = "/getSummary", method = RequestMethod.GET)
     public HotfixSummary getDatabaseSummary() {
-        HotfixSummary summary = dbHandler.getSummary();
-        return summary;
+        return dbHandler.getSummary();
     }
 
     @RequestMapping(value = "/getUserDetails", method = RequestMethod.GET)
     public List<UserDetails> getUserDetails(
             @RequestParam(value = "host", defaultValue = "--", required = false) String host) {
 
-        List<UserDetails> userDetails = dbHandler.getUserDetails(host);
-        return userDetails;
+        return dbHandler.getUserDetails(host);
     }
 
     @RequestMapping(value = "/getDistinctModules", method = RequestMethod.GET)

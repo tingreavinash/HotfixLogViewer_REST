@@ -34,7 +34,7 @@ import java.util.*;
 public class HotfixviewerApplication implements CommandLineRunner {
 
     private static final Logger LOG = LoggerFactory.getLogger(HotfixviewerApplication.class);
-    public static List<String> distinctCramerVersion = new ArrayList<String>();
+    public static List<String> distinctVersion = new ArrayList<String>();
     public static List<String> distinctModules = new ArrayList<String>();
 
     @Autowired
@@ -94,11 +94,8 @@ public class HotfixviewerApplication implements CommandLineRunner {
 
         if (isLoadDataFromFileEnabled) {
             long total_records_inserted = ecpHandler.mergeExcelDataToDB();
-            if (total_records_inserted != 0) {
-                LOG.info("Total records inserted: " + total_records_inserted + "\n");
-            } else {
-                LOG.warn("Operation failed.");
-            }
+            LOG.info("Total records inserted: " + total_records_inserted + "\n");
+
             LOG.info("====== Database Summary ======");
             HotfixSummary hfSummary = ecpController.getDatabaseSummary();
             LOG.info("Total hotfixes in DB: " + hfSummary.getTotalHotfixes());
@@ -108,19 +105,11 @@ public class HotfixviewerApplication implements CommandLineRunner {
             loadSampleData();
         }
 
-        Map<Set<String>, Set<String>> map = ecpService.getDistinctValues();
+        Set<String> version_set = ecpService.getDistinctVersions();
+        Set<String> module_set = ecpService.getDistinctModules();
 
-        Set<String> version_set = null;
-        Set<String> module_set = null;
-        for (Map.Entry<Set<String>, Set<String>> entry : map.entrySet()) {
-            version_set = entry.getKey();
-            module_set = entry.getValue();
-        }
-        if (version_set != null && module_set != null) {
-            distinctCramerVersion.addAll(version_set);
-            distinctModules.addAll(module_set);
-        }
-
+        distinctVersion.addAll(version_set);
+        distinctModules.addAll(module_set);
 
     }
 

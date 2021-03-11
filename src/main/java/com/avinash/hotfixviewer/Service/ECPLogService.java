@@ -141,9 +141,10 @@ public class ECPLogService {
      * @return List of ECPLog
      */
     public List<ECPLog> getAllECP() {
-        if (ecpRepo.findAll().isEmpty())
-            return new ArrayList<ECPLog>();
-        return ecpRepo.findAll();
+        List<ECPLog> result = ecpRepo.findAll();
+        if (result.isEmpty())
+            return new ArrayList<>();
+        return result;
     }
 
     public long getCountOfHotfixes() {
@@ -175,29 +176,33 @@ public class ECPLogService {
         return result;
     }
 
-    /**
-     * Method for getting disting values from database.
-     * (cramerVersion, modules)
-     * @return Distinct values.
-     */
-    public Map<Set<String>, Set<String>> getDistinctValues() {
+
+    public Set<String> getDistinctVersions(){
         Set<String> versions = new HashSet<String>();
-        Set<String> modules = new HashSet<String>();
-
-        Map<Set<String>, Set<String>> result_list = new HashMap<Set<String>, Set<String>>();
-
         try {
             List<ECPLog> all_ecp = this.getAllECP();
             for (ECPLog ecp : all_ecp) {
                 versions.add(ecp.getCramerVersion());
-                modules.add(ecp.getModule());
             }
-
-            result_list.put(versions, modules);
-
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        return result_list;
+
+        return versions;
     }
+
+    public Set<String> getDistinctModules(){
+        Set<String> modules = new HashSet<String>();
+
+        try {
+            List<ECPLog> all_ecp = this.getAllECP();
+            for (ECPLog ecp : all_ecp) {
+                modules.add(ecp.getModule());
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return modules;
+    }
+
 }

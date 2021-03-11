@@ -4,13 +4,12 @@
  */
 package com.avinash.hotfixviewer.Repository;
 
-import java.util.List;
-
+import com.avinash.hotfixviewer.Model.ECPLog;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
-import com.avinash.hotfixviewer.Model.ECPLog;
+import java.util.List;
 
 public interface ECPLogRepository extends MongoRepository<ECPLog, Long> {
 	

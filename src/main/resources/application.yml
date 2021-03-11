@@ -1,6 +1,7 @@
 excelFilePath: C:\Work\Projects\Hotfix Viewer Spring\Executables\Excel File\ECPLog.xlsm
 application-description: REST application for accessing Hotfix data from Database.
 application-version: v3
+headerPrefix: test
 
 app:
   load_data_from_file: false
@@ -23,7 +24,7 @@ spring:
       username: test
 server:
   port: 7777
-  
+
 ---
 spring:
   profiles: prod
@@ -37,7 +38,7 @@ spring:
       host: localhost
 server:
   port: 4569
-  
+
 
 ---
 logging:

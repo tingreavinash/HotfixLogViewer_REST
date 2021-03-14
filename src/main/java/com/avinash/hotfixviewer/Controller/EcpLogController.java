@@ -156,6 +156,7 @@ public class EcpLogController {
             @RequestHeader(value = "HostAddress", defaultValue = "disabled", required = false) String HostAddress,
             @RequestHeader(value = "NTNET", defaultValue = "disabled", required = false) String ntnet) {
 
+        Long t1 = new Date().getTime();
 
         List<String> requestInput = new ArrayList<String>();
 
@@ -187,7 +188,57 @@ public class EcpLogController {
         ECPLogResponseObject ro = new ECPLogResponseObject();
         ro.setCount(ecp_list.size());
         ro.setRecords(ecp_list);
+
+        Long t2 = new Date().getTime();
+        System.out.println("Time taken for getResultByFields: "+ (t2-t1));
+
+
         return ResponseEntity.ok().body(ro);
+
+    }
+
+    @RequestMapping(value = "/getTotalCountAllResults", method = RequestMethod.GET)
+    public ResponseEntity<ECPLogResponseObject> getTotalCountAllResults(
+            @RequestParam(value = "ecpNo", defaultValue = "", required = false) String ecpNo,
+            @RequestParam(value = "description", defaultValue = "", required = false) String description,
+            @RequestParam(value = "cramerVersion", defaultValue = "", required = false) List<String> cramerVersion,
+            @RequestParam(value = "latestEcp", defaultValue = "", required = false) String latestEcp,
+            @RequestParam(value = "requestor", defaultValue = "", required = false) String requestor,
+            @RequestParam(value = "fixedBy", defaultValue = "", required = false) String fixedBy,
+            @RequestParam(value = "module", defaultValue = "", required = false) List<String> module,
+            @RequestParam(value = "caseOrCrNo", defaultValue = "", required = false) String caseOrCrNo,
+            @RequestParam(value = "filesModifiedInPerforce", defaultValue = "", required = false) String filesModifiedInPerforce,
+            @RequestParam(value = "filesReleasedToCustomer", defaultValue = "", required = false) String filesReleasedToCustomer,
+            @RequestParam(value = "rolledIntoVersion", defaultValue = "", required = false) String rolledIntoVersion,
+            @RequestParam(value = "specificFunc", defaultValue = "", required = false) String specificFunc,
+            HttpServletRequest httpRequest, @RequestHeader(value = "Hostname", defaultValue = "disabled", required = false) String hostname,
+            @RequestHeader(value = "HostAddress", defaultValue = "disabled", required = false) String HostAddress,
+            @RequestHeader(value = "NTNET", defaultValue = "disabled", required = false) String ntnet) {
+        Long t3 = new Date().getTime();
+
+
+        if (cramerVersion.isEmpty()) {
+            cramerVersion = HotfixviewerApplication.distinctVersion;
+        }
+        if (module.isEmpty()) {
+            module = HotfixviewerApplication.distinctModules;
+        }
+
+        Long result = ecpService.getRecordCount(ecpNo, description, cramerVersion, latestEcp, requestor,
+                fixedBy, module, caseOrCrNo, filesModifiedInPerforce, filesReleasedToCustomer, rolledIntoVersion,
+                specificFunc);
+
+
+
+        ECPLogResponseObject resultObject = new ECPLogResponseObject();
+        resultObject.setCount( result.intValue());
+        resultObject.setRecords(null);
+
+        Long t4 = new Date().getTime();
+        System.out.println("Time taken for getRecordCount: "+ (t4-t3));
+        System.out.println("Count: "+result);
+
+        return ResponseEntity.ok().body(resultObject);
 
     }
 

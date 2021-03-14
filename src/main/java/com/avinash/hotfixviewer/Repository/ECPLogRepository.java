@@ -49,6 +49,19 @@ public interface ECPLogRepository extends MongoRepository<ECPLog, Long> {
 	List<ECPLog> findByOptions(String ecpNo, String description, List<String> cramerVersion, String latestEcp,
 			String requestor, String fixedBy, List<String> module, String caseOrCrNo, String filesModifiedInPerforce,
 			String filesReleasedToCustomer, String rolledIntoVersion, String specificFunc);
+
+	@Query(value = "{$and: [{ 'ecpNo' : { $regex: ?0, $options: 'i' } }, "
+			+ "{ 'description' : { $regex: ?1, $options: 'i' } }," + "{ 'cramerVersion' : { $in: ?2 } },"
+			+ "{ 'latestEcp' : { $regex: ?3, $options: 'i' } }," + "{ 'requestor' : { $regex: ?4, $options: 'i' } },"
+			+ "{ 'fixedBy' : { $regex: ?5, $options: 'i' } }," + "{ 'module' : { $in: ?6 } },"
+			+ "{ 'caseOrCrNo' : { $regex: ?7, $options: 'i' } },"
+			+ "{ 'filesModifiedInPerforce' : { $regex: ?8, $options: 'i' } },"
+			+ "{ 'filesReleasedToCustomer' : { $regex: ?9, $options: 'i' } },"
+			+ "{ 'rolledIntoVersion' : { $regex: ?10, $options: 'i' } },"
+			+ "{ 'specificFunc' : { $regex: ?11, $options: 'i' } }]}", count = true)
+	Long findByOptionsGetCount(String ecpNo, String description, List<String> cramerVersion, String latestEcp,
+							   String requestor, String fixedBy, List<String> module, String caseOrCrNo, String filesModifiedInPerforce,
+							   String filesReleasedToCustomer, String rolledIntoVersion, String specificFunc);
 	
 	@Query(value="{ 'latestEcp' : ?0 }", sort="{sequence : -1}")
 	List<ECPLog> findByLatestEcp(String latestEcp);

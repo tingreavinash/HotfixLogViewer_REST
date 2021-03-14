@@ -122,6 +122,35 @@ public class ECPLogService {
         }
     }
 
+    public Long getRecordCount(String ecpNo, String description, List<String> cramerVersion,
+                                          String latestEcp, String requestor, String fixedBy, List<String> module, String caseOrCrNo,
+                                          String filesModifiedInPerforce, String filesReleasedToCustomer, String rolledIntoVersion,
+                                          String specificFunc) {
+        try {
+
+            ecpNo = ecpNo.replaceAll("\\s", ".*");
+            description = description.replaceAll("\\s", ".*");
+            latestEcp = latestEcp.replaceAll("\\s", ".*");
+            requestor = requestor.replaceAll("\\s", ".*");
+            fixedBy = fixedBy.replaceAll("\\s", ".*");
+            caseOrCrNo = caseOrCrNo.replaceAll("\\s", ".*");
+            filesModifiedInPerforce = filesModifiedInPerforce.replaceAll("\\s", ".*");
+            filesReleasedToCustomer = filesReleasedToCustomer.replaceAll("\\s", ".*");
+            rolledIntoVersion = rolledIntoVersion.replaceAll("\\s", ".*");
+            specificFunc = specificFunc.replaceAll("\\s", ".*");
+
+            Long result = ecpRepo.findByOptionsGetCount(".*" + ecpNo + ".*", ".*" + description + ".*", cramerVersion,
+                    ".*" + latestEcp + ".*", ".*" + requestor + ".*", ".*" + fixedBy + ".*", module,
+                    ".*" + caseOrCrNo + ".*", ".*" + filesModifiedInPerforce + ".*",
+                    ".*" + filesReleasedToCustomer + ".*", ".*" + rolledIntoVersion + ".*", ".*" + specificFunc + ".*");
+            return result;
+        } catch (Exception e) {
+            LOG.info("Exception:\n" + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
     public ECPLog addECP(ECPLog ecp_obj) {
 

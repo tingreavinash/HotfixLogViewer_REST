@@ -2,9 +2,9 @@
  * MongoRepository interface for interacting with MongoDB.
  * @author Avinash Tingre
  */
-package com.avinash.hotfixviewer.Repository;
+package com.avinash.HotfixService.Repository;
 
-import com.avinash.hotfixviewer.Model.ECPLog;
+import com.avinash.HotfixService.Model.ECPLog;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;

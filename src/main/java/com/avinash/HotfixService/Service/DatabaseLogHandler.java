@@ -1,9 +1,9 @@
-package com.avinash.hotfixviewer.Service;
+package com.avinash.HotfixService.Service;
 
-import com.avinash.hotfixviewer.Model.HotfixSummary;
-import com.avinash.hotfixviewer.Model.UserDetails;
-import com.avinash.hotfixviewer.Repository.HotfixSummaryRepository;
-import com.avinash.hotfixviewer.Repository.UserDetailsRepository;
+import com.avinash.HotfixService.Model.HotfixSummary;
+import com.avinash.HotfixService.Model.UserDetails;
+import com.avinash.HotfixService.Repository.HotfixSummaryRepository;
+import com.avinash.HotfixService.Repository.UserDetailsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

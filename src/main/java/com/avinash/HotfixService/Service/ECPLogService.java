@@ -3,10 +3,10 @@
  *
  * @author Avinash Tingre
  */
-package com.avinash.hotfixviewer.Service;
+package com.avinash.HotfixService.Service;
 
-import com.avinash.hotfixviewer.Model.ECPLog;
-import com.avinash.hotfixviewer.Repository.ECPLogRepository;
+import com.avinash.HotfixService.Model.ECPLog;
+import com.avinash.HotfixService.Repository.ECPLogRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.avinash.hotfixviewer.Model;
+package com.avinash.HotfixService.Model;
 
 public abstract class Metadata<C, T> {
     private C count;

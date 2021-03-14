@@ -3,10 +3,10 @@
  *
  * @author Avinash Tingre
  */
-package com.avinash.hotfixviewer.Service;
+package com.avinash.HotfixService.Service;
 
-import com.avinash.hotfixviewer.Model.ECPLog;
-import com.avinash.hotfixviewer.Model.HotfixSummary;
+import com.avinash.HotfixService.Model.ECPLog;
+import com.avinash.HotfixService.Model.HotfixSummary;
 import com.monitorjbl.xlsx.StreamingReader;
 import com.monitorjbl.xlsx.impl.StreamingCell;
 import org.apache.poi.ss.usermodel.*;

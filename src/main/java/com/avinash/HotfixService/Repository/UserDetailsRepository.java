@@ -1,6 +1,6 @@
-package com.avinash.hotfixviewer.Repository;
+package com.avinash.HotfixService.Repository;
 
-import com.avinash.hotfixviewer.Model.UserDetails;
+import com.avinash.HotfixService.Model.UserDetails;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 

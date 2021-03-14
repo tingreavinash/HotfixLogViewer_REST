@@ -4,13 +4,13 @@
  * @author Avinash Tingre
  */
 
-package com.avinash.hotfixviewer;
+package com.avinash.HotfixService;
 
-import com.avinash.hotfixviewer.Controller.EcpLogController;
-import com.avinash.hotfixviewer.Model.ECPLog;
-import com.avinash.hotfixviewer.Model.HotfixSummary;
-import com.avinash.hotfixviewer.Service.ECPFileHandler;
-import com.avinash.hotfixviewer.Service.ECPLogService;
+import com.avinash.HotfixService.Controller.EcpLogController;
+import com.avinash.HotfixService.Model.ECPLog;
+import com.avinash.HotfixService.Model.HotfixSummary;
+import com.avinash.HotfixService.Service.ECPFileHandler;
+import com.avinash.HotfixService.Service.ECPLogService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
@@ -89,7 +89,6 @@ public class HotfixviewerApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws IOException, CloneNotSupportedException {
-        LOG.info("\n\n\n");
         LOG.info("============ Hotfix Application Started ============");
 
         if (isLoadDataFromFileEnabled) {

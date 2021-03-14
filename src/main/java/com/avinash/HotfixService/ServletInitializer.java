@@ -1,4 +1,4 @@
-package com.avinash.hotfixviewer;
+package com.avinash.HotfixService;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;

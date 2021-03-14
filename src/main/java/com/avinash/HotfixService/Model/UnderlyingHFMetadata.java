@@ -1,4 +1,4 @@
-package com.avinash.hotfixviewer.Model;
+package com.avinash.HotfixService.Model;
 
 import java.util.Map;
 

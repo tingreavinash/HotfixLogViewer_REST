@@ -3,12 +3,12 @@
  *
  * @author Avinash Tingre
  */
-package com.avinash.hotfixviewer.Controller;
+package com.avinash.HotfixService.Controller;
 
-import com.avinash.hotfixviewer.HotfixviewerApplication;
-import com.avinash.hotfixviewer.Model.*;
-import com.avinash.hotfixviewer.Service.DatabaseLogHandler;
-import com.avinash.hotfixviewer.Service.ECPLogService;
+import com.avinash.HotfixService.HotfixviewerApplication;
+import com.avinash.HotfixService.Model.*;
+import com.avinash.HotfixService.Service.DatabaseLogHandler;
+import com.avinash.HotfixService.Service.ECPLogService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;

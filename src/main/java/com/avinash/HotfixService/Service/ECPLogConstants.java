@@ -3,7 +3,7 @@
  *
  * @author Avinash Tingre
  */
-package com.avinash.hotfixviewer.Service;
+package com.avinash.HotfixService.Service;
 
 public final class ECPLogConstants {
 

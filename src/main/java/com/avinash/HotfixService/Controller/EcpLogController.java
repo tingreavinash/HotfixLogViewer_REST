@@ -245,6 +245,7 @@ public class EcpLogController {
 
     }
 
+
     private void logToDatabase(String hostname, String hostaddress, String ntnet,
                                List<String> searchInput, String requestName) {
 

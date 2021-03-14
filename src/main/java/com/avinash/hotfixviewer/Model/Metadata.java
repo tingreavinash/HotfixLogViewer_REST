@@ -1,14 +1,14 @@
 package com.avinash.hotfixviewer.Model;
 
 public abstract class Metadata<C, T> {
-    private int count;
+    private C count;
     private T details;
 
-    public int getCount() {
+    public C getCount() {
         return count;
     }
 
-    public void setCount(int count) {
+    public void setCount(C count) {
         this.count = count;
     }
 

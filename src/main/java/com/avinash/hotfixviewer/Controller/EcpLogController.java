@@ -61,7 +61,7 @@ public class EcpLogController {
      * @return ECPLog objects
      */
     @RequestMapping(value = "/getPageableResult", method = RequestMethod.GET)
-    public ResponseEntity<ECPLogResponseObject> getPageableResult(
+    public ResponseEntity<SearchResultMetadata> getPageableResult(
             @RequestParam(value = "page_no", required = true) int page_no,
             @RequestParam(value = "page_size", required = true) int page_size,
             @RequestParam(value = "ecpNo", defaultValue = "", required = false) String ecpNo,
@@ -112,9 +112,10 @@ public class EcpLogController {
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, headerPrefix);
 
-        ECPLogResponseObject ro = new ECPLogResponseObject();
+        SearchResultMetadata ro = new SearchResultMetadata();
         ro.setCount(ecp_list.size());
-        ro.setRecords(ecp_list);
+        ro.setDetails(ecp_list);
+
         return ResponseEntity.ok().headers(headers).body(ro);
 
     }
@@ -139,7 +140,7 @@ public class EcpLogController {
      */
     @Operation(summary = "Find all hotfixes", description = "Hotfix search with given criteria.", tags = {"Hotfix Search"})
     @RequestMapping(value = "/getAllResults", method = RequestMethod.GET)
-    public ResponseEntity<ECPLogResponseObject> getAllResults(
+    public ResponseEntity<SearchResultMetadata> getAllResults(
             @RequestParam(value = "ecpNo", defaultValue = "", required = false) String ecpNo,
             @RequestParam(value = "description", defaultValue = "", required = false) String description,
             @RequestParam(value = "cramerVersion", defaultValue = "", required = false) List<String> cramerVersion,
@@ -185,9 +186,10 @@ public class EcpLogController {
                 fixedBy, module, caseOrCrNo, filesModifiedInPerforce, filesReleasedToCustomer, rolledIntoVersion,
                 specificFunc);
 
-        ECPLogResponseObject ro = new ECPLogResponseObject();
+        SearchResultMetadata ro = new SearchResultMetadata();
         ro.setCount(ecp_list.size());
-        ro.setRecords(ecp_list);
+        ro.setDetails(ecp_list);
+
 
         Long t2 = new Date().getTime();
         System.out.println("Time taken for getResultByFields: "+ (t2-t1));
@@ -198,7 +200,7 @@ public class EcpLogController {
     }
 
     @RequestMapping(value = "/getTotalCountAllResults", method = RequestMethod.GET)
-    public ResponseEntity<ECPLogResponseObject> getTotalCountAllResults(
+    public ResponseEntity<SearchResultMetadata> getTotalCountAllResults(
             @RequestParam(value = "ecpNo", defaultValue = "", required = false) String ecpNo,
             @RequestParam(value = "description", defaultValue = "", required = false) String description,
             @RequestParam(value = "cramerVersion", defaultValue = "", required = false) List<String> cramerVersion,
@@ -230,9 +232,10 @@ public class EcpLogController {
 
 
 
-        ECPLogResponseObject resultObject = new ECPLogResponseObject();
+        SearchResultMetadata resultObject = new SearchResultMetadata();
         resultObject.setCount( result.intValue());
-        resultObject.setRecords(null);
+        resultObject.setDetails(null);
+
 
         Long t4 = new Date().getTime();
         System.out.println("Time taken for getRecordCount: "+ (t4-t3));
@@ -272,7 +275,7 @@ public class EcpLogController {
      */
 
     @RequestMapping(value = "/getUnderlyingHFs", method = RequestMethod.GET)
-    public ResponseEntity<UnderlyingHFResponseObject> getUnderlyingHFs(
+    public ResponseEntity<UnderlyingHFMetadata> getUnderlyingHFs(
             @RequestParam(value = "latestEcp", defaultValue = "-", required = true) String latestEcp,
             HttpServletRequest request) {
 
@@ -282,9 +285,11 @@ public class EcpLogController {
         headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, headerPrefix);
 
         Map<Integer, String> map = ecpService.getUnderlyingHF(latestEcp);
-        UnderlyingHFResponseObject ro = new UnderlyingHFResponseObject();
+        UnderlyingHFMetadata ro = new UnderlyingHFMetadata();
         ro.setCount(map.size());
-        ro.setRecords(map);
+        ro.setDetails(map);
+
+
 
         return ResponseEntity.ok().headers(headers).body(ro);
 

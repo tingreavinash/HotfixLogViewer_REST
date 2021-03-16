@@ -3,8 +3,8 @@ application-description: REST application for accessing Hotfix data from Databas
 application-version: v3
 headerPrefix: test
 
-#Set this flag to "false" if you want to load sample data from "SampleHotfixData.json" file into Database.
-#Otherwise on PROD it should be set to "true".
+#Set this flag to "true" if you want to load sample data from "SampleHotfixData.json" file into Database.
+#Otherwise on PROD it should be set to "false".
 app:
   use_sample_data: true
 

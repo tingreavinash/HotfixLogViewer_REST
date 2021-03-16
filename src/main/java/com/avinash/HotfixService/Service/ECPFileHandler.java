@@ -200,7 +200,8 @@ public class ECPFileHandler {
 
             workbook = StreamingReader.builder().rowCacheSize(100).bufferSize(4096).open(fis);
 
-            sheet = workbook.getSheetAt(2);
+            //sheet = workbook.getSheetAt(2);
+            sheet = workbook.getSheet("ECPlog");
             LOG.info("Data loading started: " + new Date());
 
             for (Row r : sheet) {

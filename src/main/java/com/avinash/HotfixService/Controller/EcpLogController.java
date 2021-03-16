@@ -61,7 +61,7 @@ public class EcpLogController {
      * @return ECPLog objects
      */
     @RequestMapping(value = "/getPageableResult", method = RequestMethod.GET)
-    public ResponseEntity<SearchResultMetadata> getPageableResult(
+    public ResponseEntity<Metadata> getPageableResult(
             @RequestParam(value = "page_no", required = true) int page_no,
             @RequestParam(value = "page_size", required = true) int page_size,
             @RequestParam(value = "ecpNo", defaultValue = "", required = false) String ecpNo,
@@ -112,7 +112,7 @@ public class EcpLogController {
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, headerPrefix);
 
-        SearchResultMetadata ro = new SearchResultMetadata();
+        Metadata ro = new SearchResultMetadata();
         ro.setCount(ecp_list.size());
         ro.setDetails(ecp_list);
 
@@ -140,7 +140,7 @@ public class EcpLogController {
      */
     @Operation(summary = "Find all hotfixes", description = "Hotfix search with given criteria.", tags = {"Hotfix Search"})
     @RequestMapping(value = "/getAllResults", method = RequestMethod.GET)
-    public ResponseEntity<SearchResultMetadata> getAllResults(
+    public ResponseEntity<Metadata> getAllResults(
             @RequestParam(value = "ecpNo", defaultValue = "", required = false) String ecpNo,
             @RequestParam(value = "description", defaultValue = "", required = false) String description,
             @RequestParam(value = "cramerVersion", defaultValue = "", required = false) List<String> cramerVersion,
@@ -186,7 +186,7 @@ public class EcpLogController {
                 fixedBy, module, caseOrCrNo, filesModifiedInPerforce, filesReleasedToCustomer, rolledIntoVersion,
                 specificFunc);
 
-        SearchResultMetadata ro = new SearchResultMetadata();
+        Metadata ro = new SearchResultMetadata();
         ro.setCount(ecp_list.size());
         ro.setDetails(ecp_list);
 
@@ -200,7 +200,7 @@ public class EcpLogController {
     }
 
     @RequestMapping(value = "/getTotalCountAllResults", method = RequestMethod.GET)
-    public ResponseEntity<SearchResultMetadata> getTotalCountAllResults(
+    public ResponseEntity<Metadata> getTotalCountAllResults(
             @RequestParam(value = "ecpNo", defaultValue = "", required = false) String ecpNo,
             @RequestParam(value = "description", defaultValue = "", required = false) String description,
             @RequestParam(value = "cramerVersion", defaultValue = "", required = false) List<String> cramerVersion,
@@ -232,7 +232,7 @@ public class EcpLogController {
 
 
 
-        SearchResultMetadata resultObject = new SearchResultMetadata();
+        Metadata resultObject = new SearchResultMetadata();
         resultObject.setCount( result.intValue());
         resultObject.setDetails(null);
 
@@ -276,7 +276,7 @@ public class EcpLogController {
      */
 
     @RequestMapping(value = "/getUnderlyingHFs", method = RequestMethod.GET)
-    public ResponseEntity<UnderlyingHFMetadata> getUnderlyingHFs(
+    public ResponseEntity<Metadata> getUnderlyingHFs(
             @RequestParam(value = "latestEcp", defaultValue = "-", required = true) String latestEcp,
             HttpServletRequest request) {
 
@@ -286,7 +286,7 @@ public class EcpLogController {
         headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, headerPrefix);
 
         Map<Integer, String> map = ecpService.getUnderlyingHF(latestEcp);
-        UnderlyingHFMetadata ro = new UnderlyingHFMetadata();
+        Metadata ro = new UnderlyingHFMetadata();
         ro.setCount(map.size());
         ro.setDetails(map);
 

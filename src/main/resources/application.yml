@@ -14,8 +14,10 @@ spring:
     active: dev
   application:
     name: HFLogViewer_REST
+
 ---
 spring:
+  profiles: dev
   data:
     mongodb:
       authentication-database: testdb

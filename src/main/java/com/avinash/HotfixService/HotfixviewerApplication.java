@@ -50,8 +50,8 @@ public class HotfixviewerApplication implements CommandLineRunner {
     @Autowired
     ObjectMapper objectMapper;
 
-    @Value("${app.load_data_from_file}")
-    Boolean isLoadDataFromFileEnabled;
+    @Value("${app.use_sample_data}")
+    Boolean isLoadSampleData;
 
     public static void main(String[] args) {
         SpringApplication.run(HotfixviewerApplication.class, args);
@@ -91,7 +91,11 @@ public class HotfixviewerApplication implements CommandLineRunner {
     public void run(String... args) throws IOException, CloneNotSupportedException {
         LOG.info("============ Hotfix Application Started ============");
 
-        if (isLoadDataFromFileEnabled) {
+        if (isLoadSampleData) {
+            loadSampleData();
+
+        } else {
+
             long total_records_inserted = ecpHandler.mergeExcelDataToDB();
             LOG.info("Total records inserted: " + total_records_inserted + "\n");
 
@@ -99,9 +103,6 @@ public class HotfixviewerApplication implements CommandLineRunner {
             HotfixSummary hfSummary = ecpController.getDatabaseSummary();
             LOG.info("Total hotfixes in DB: " + hfSummary.getTotalHotfixes());
             LOG.info("Newly added hotfixes: " + hfSummary.getNewlyAddedHotfixes());
-
-        } else {
-            loadSampleData();
         }
 
         Set<String> version_set = ecpService.getDistinctVersions();

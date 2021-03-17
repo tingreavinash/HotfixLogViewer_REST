@@ -193,7 +193,7 @@ public class ECPFileHandler {
             int startRow = 7;
             int endRow = getLastRowNum();
             // int endRow = 1000;
-            ecpService.deleteAllRecords();
+            ecpService.deleteAll();
             LOG.info("Old records Deleted.");
             File file = new File(excelFilePath);
             fis = new FileInputStream(file);
@@ -211,7 +211,7 @@ public class ECPFileHandler {
                     row_values = getListFromRow(r);
                     ecplog = createObjectFromlist(row_values, total_records);
 
-                    ecpService.addECP(ecplog);
+                    ecpService.save(ecplog);
                     total_records++;
                     row_values.clear();
                 }
@@ -246,8 +246,8 @@ public class ECPFileHandler {
 
         HotfixSummary summary = new HotfixSummary();
         summary.setDatabaseCreatedAt(new Date());
-        summary.setNewlyAddedHotfixes(ecpService.getCountOfHotfixes() - oldRecords);
-        summary.setTotalHotfixes(ecpService.getCountOfHotfixes());
+        summary.setNewlyAddedHotfixes(ecpService.countAllHotfixes() - oldRecords);
+        summary.setTotalHotfixes(ecpService.countAllHotfixes());
         dbhistoryService.addSummary(summary);
         LOG.info("Summary updated in DB !");
 

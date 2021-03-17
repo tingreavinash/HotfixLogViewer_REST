@@ -23,6 +23,7 @@ public class DatabaseLogHandler {
 
     public List<UserDetails> getUserDetails(String host) {
         host = ".*" + host + ".*";
+
         return userDetailsRepo.findByHostname(host);
     }
 

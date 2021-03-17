@@ -41,106 +41,13 @@ public class EcpLogController {
     private DatabaseLogHandler dbHandler;
 
     /**
-     * REST endpoint for getting "Pageable" results matching below parameters.
-     *
-     * @param page_no                 (mandatory)
-     * @param page_size               (mandatory)
-     * @param ecpNo
-     * @param description
-     * @param cramerVersion
-     * @param latestEcp
-     * @param requestor
-     * @param fixedBy
-     * @param module
-     * @param caseOrCrNo
-     * @param filesModifiedInPerforce
-     * @param filesReleasedToCustomer
-     * @param rolledIntoVersion
-     * @param specificFunc
-     * @param request
-     * @return ECPLog objects
-     */
-    @RequestMapping(value = "/getPageableResult", method = RequestMethod.GET)
-    public ResponseEntity<Metadata> getPageableResult(
-            @RequestParam(value = "page_no", required = true) int page_no,
-            @RequestParam(value = "page_size", required = true) int page_size,
-            @RequestParam(value = "ecpNo", defaultValue = "", required = false) String ecpNo,
-            @RequestParam(value = "description", defaultValue = "", required = false) String description,
-            @RequestParam(value = "cramerVersion", defaultValue = "", required = false) List<String> cramerVersion,
-            @RequestParam(value = "latestEcp", defaultValue = "", required = false) String latestEcp,
-            @RequestParam(value = "requestor", defaultValue = "", required = false) String requestor,
-            @RequestParam(value = "fixedBy", defaultValue = "", required = false) String fixedBy,
-            @RequestParam(value = "module", defaultValue = "", required = false) List<String> module,
-            @RequestParam(value = "caseOrCrNo", defaultValue = "", required = false) String caseOrCrNo,
-            @RequestParam(value = "filesModifiedInPerforce", defaultValue = "", required = false) String filesModifiedInPerforce,
-            @RequestParam(value = "filesReleasedToCustomer", defaultValue = "", required = false) String filesReleasedToCustomer,
-            @RequestParam(value = "rolledIntoVersion", defaultValue = "", required = false) String rolledIntoVersion,
-            @RequestParam(value = "specificFunc", defaultValue = "", required = false) String specificFunc,
-            HttpServletRequest request, @RequestHeader("Hostname") String hostname,
-            @RequestHeader("HostAddress") String HostAddress,
-            @RequestHeader("NTNET") String ntnet) {
-        LOG.info("Test messa2");
-        List<String> requestInput = new ArrayList<String>();
-        requestInput.add("pageNo=" + page_no);
-        requestInput.add("pageSize=" + page_size);
-        requestInput.add("ecpNo=" + ecpNo);
-        requestInput.add("description=" + description);
-        requestInput.add("latestEcp=" + latestEcp);
-        requestInput.add("requestor=" + requestor);
-        requestInput.add("fixedBy=" + fixedBy);
-        requestInput.add("caseOrCRNo=" + caseOrCrNo);
-        requestInput.add("filesModifiedInPerforce=" + filesModifiedInPerforce);
-        requestInput.add("filesReleasedToCustomer=" + filesReleasedToCustomer);
-        requestInput.add("specificFunc=" + specificFunc);
-        requestInput.add("module=" + module);
-        requestInput.add("cramerVersion=" + cramerVersion);
-
-        logToDatabase(hostname, HostAddress, ntnet, requestInput, "/getPageableResult");
-
-
-        if (cramerVersion.isEmpty()) {
-            cramerVersion = HotfixviewerApplication.distinctVersion;
-        }
-        if (module.isEmpty()) {
-            module = HotfixviewerApplication.distinctModules;
-        }
-
-        List<ECPLog> ecp_list = ecpService.getResultByFields(ecpNo, description, cramerVersion, latestEcp, requestor,
-                fixedBy, module, caseOrCrNo, filesModifiedInPerforce, filesReleasedToCustomer, rolledIntoVersion,
-                specificFunc, page_no, page_size);
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, headerPrefix);
-
-        Metadata ro = new SearchResultMetadata();
-        ro.setCount(ecp_list.size());
-        ro.setDetails(ecp_list);
-
-        return ResponseEntity.ok().headers(headers).body(ro);
-
-    }
-
-    /**
-     * REST endpoint for getting "all" results matching below parameters.
-     *
-     * @param ecpNo
-     * @param description
-     * @param cramerVersion
-     * @param latestEcp
-     * @param requestor
-     * @param fixedBy
-     * @param module
-     * @param caseOrCrNo
-     * @param filesModifiedInPerforce
-     * @param filesReleasedToCustomer
-     * @param rolledIntoVersion
-     * @param specificFunc
-     * @param httpRequest
-     * @return
+     * Fetch details of matching hotfixes.
      */
     @Operation(summary = "Find all hotfixes", description = "Hotfix search with given criteria.", tags = {"Hotfix Search"})
     @RequestMapping(value = "/getAllResults", method = RequestMethod.GET)
-    public ResponseEntity<Metadata> getAllResults(
+    public ResponseEntity<Metadata> getHotfixDetails(
+            @RequestParam(value = "page_no", defaultValue = "-1", required = false) int page_no,
+            @RequestParam(value = "page_size", defaultValue = "-1", required = false) int page_size,
             @RequestParam(value = "ecpNo", defaultValue = "", required = false) String ecpNo,
             @RequestParam(value = "description", defaultValue = "", required = false) String description,
             @RequestParam(value = "cramerVersion", defaultValue = "", required = false) List<String> cramerVersion,
@@ -156,49 +63,56 @@ public class EcpLogController {
             HttpServletRequest httpRequest, @RequestHeader(value = "Hostname", defaultValue = "disabled", required = false) String hostname,
             @RequestHeader(value = "HostAddress", defaultValue = "disabled", required = false) String HostAddress,
             @RequestHeader(value = "NTNET", defaultValue = "disabled", required = false) String ntnet) {
-
-        Long t1 = new Date().getTime();
-
-        List<String> requestInput = new ArrayList<String>();
-
-        if (ecpNo.length() > 0) requestInput.add("Hotfix No: " + ecpNo + ", ");
-        if (latestEcp.length() > 0) requestInput.add("Latest Hotfix: " + latestEcp + ", ");
-        if (description.length() > 0) requestInput.add("Description: " + description + ", ");
-        if (cramerVersion.size() > 0) requestInput.add("Versions: " + cramerVersion + ", ");
-        if (requestor.length() > 0) requestInput.add("Requested by: " + requestor + ", ");
-        if (fixedBy.length() > 0) requestInput.add("Fixed by: " + fixedBy + ", ");
-        if (module.size() > 0) requestInput.add("Modules: " + module + ", ");
-        if (caseOrCrNo.length() > 0) requestInput.add("Case or CR No: " + caseOrCrNo + ", ");
-        if (filesModifiedInPerforce.length() > 0) requestInput.add("Files modified: " + filesModifiedInPerforce + ", ");
-        if (filesReleasedToCustomer.length() > 0) requestInput.add("Files released: " + filesReleasedToCustomer + ", ");
-        if (specificFunc.length() > 0) requestInput.add("Specific function: " + specificFunc + ", ");
-
-        logToDatabase(hostname, HostAddress, ntnet, requestInput, "/getAllResults");
-
-        if (cramerVersion.isEmpty()) {
-            cramerVersion = HotfixviewerApplication.distinctVersion;
-        }
-        if (module.isEmpty()) {
-            module = HotfixviewerApplication.distinctModules;
-        }
-
-        List<ECPLog> ecp_list = ecpService.getResultByFields(ecpNo, description, cramerVersion, latestEcp, requestor,
+        Metadata ro = new SearchResultMetadata();
+        Boolean minimumValuesProvided = ecpService.minimumValuesProvided(ecpNo, description, cramerVersion, latestEcp, requestor,
                 fixedBy, module, caseOrCrNo, filesModifiedInPerforce, filesReleasedToCustomer, rolledIntoVersion,
                 specificFunc);
 
-        Metadata ro = new SearchResultMetadata();
-        ro.setCount(ecp_list.size());
-        ro.setDetails(ecp_list);
+        if(minimumValuesProvided){
+            List<String> requestInput = new ArrayList<String>();
+
+            if (ecpNo.length() > 0) requestInput.add("Hotfix No: " + ecpNo + ", ");
+            if (latestEcp.length() > 0) requestInput.add("Latest Hotfix: " + latestEcp + ", ");
+            if (description.length() > 0) requestInput.add("Description: " + description + ", ");
+            if (cramerVersion.size() > 0) requestInput.add("Versions: " + cramerVersion + ", ");
+            if (requestor.length() > 0) requestInput.add("Requested by: " + requestor + ", ");
+            if (fixedBy.length() > 0) requestInput.add("Fixed by: " + fixedBy + ", ");
+            if (module.size() > 0) requestInput.add("Modules: " + module + ", ");
+            if (caseOrCrNo.length() > 0) requestInput.add("Case or CR No: " + caseOrCrNo + ", ");
+            if (filesModifiedInPerforce.length() > 0) requestInput.add("Files modified: " + filesModifiedInPerforce + ", ");
+            if (filesReleasedToCustomer.length() > 0) requestInput.add("Files released: " + filesReleasedToCustomer + ", ");
+            if (specificFunc.length() > 0) requestInput.add("Specific function: " + specificFunc + ", ");
+
+            logToDatabase(hostname, HostAddress, ntnet, requestInput, "/getAllResults");
+
+            if (cramerVersion.isEmpty()) {
+                cramerVersion = HotfixviewerApplication.distinctVersion;
+            }
+            if (module.isEmpty()) {
+                module = HotfixviewerApplication.distinctModules;
+            }
 
 
-        Long t2 = new Date().getTime();
-        System.out.println("Time taken for getResultByFields: "+ (t2-t1));
+            List<ECPLog> ecp_list = ecpService.searchData(ecpNo, description, cramerVersion, latestEcp, requestor,
+                    fixedBy, module, caseOrCrNo, filesModifiedInPerforce, filesReleasedToCustomer, rolledIntoVersion,
+                    specificFunc, page_no, page_size);
 
+
+            ro.setCount(ecp_list.size());
+            ro.setDetails(ecp_list);
+        }else {
+            ro.setCount(0);
+            ro.setDetails(null);
+        }
 
         return ResponseEntity.ok().body(ro);
 
     }
 
+
+    /***
+     * Ge count of total matching records for given parameters.
+     */
     @RequestMapping(value = "/getTotalCountAllResults", method = RequestMethod.GET)
     public ResponseEntity<Metadata> getTotalCountAllResults(
             @RequestParam(value = "ecpNo", defaultValue = "", required = false) String ecpNo,
@@ -216,30 +130,33 @@ public class EcpLogController {
             HttpServletRequest httpRequest, @RequestHeader(value = "Hostname", defaultValue = "disabled", required = false) String hostname,
             @RequestHeader(value = "HostAddress", defaultValue = "disabled", required = false) String HostAddress,
             @RequestHeader(value = "NTNET", defaultValue = "disabled", required = false) String ntnet) {
-        Long t3 = new Date().getTime();
 
-
-        if (cramerVersion.isEmpty()) {
-            cramerVersion = HotfixviewerApplication.distinctVersion;
-        }
-        if (module.isEmpty()) {
-            module = HotfixviewerApplication.distinctModules;
-        }
-
-        Long result = ecpService.getRecordCount(ecpNo, description, cramerVersion, latestEcp, requestor,
+        Boolean minimumValuesProvided = ecpService.minimumValuesProvided(ecpNo, description, cramerVersion, latestEcp, requestor,
                 fixedBy, module, caseOrCrNo, filesModifiedInPerforce, filesReleasedToCustomer, rolledIntoVersion,
                 specificFunc);
-
-
-
         Metadata resultObject = new SearchResultMetadata();
-        resultObject.setCount( result.intValue());
-        resultObject.setDetails(null);
 
+        if (minimumValuesProvided){
+            if (cramerVersion.isEmpty()) {
+                cramerVersion = HotfixviewerApplication.distinctVersion;
+            }
+            if (module.isEmpty()) {
+                module = HotfixviewerApplication.distinctModules;
+            }
 
-        Long t4 = new Date().getTime();
-        System.out.println("Time taken for getRecordCount: "+ (t4-t3));
-        System.out.println("Count: "+result);
+            Long result = ecpService.countMatchingRecords(ecpNo, description, cramerVersion, latestEcp, requestor,
+                    fixedBy, module, caseOrCrNo, filesModifiedInPerforce, filesReleasedToCustomer, rolledIntoVersion,
+                    specificFunc);
+
+            //Long result = ecpService.countTotalHotfixes();
+
+            resultObject.setCount( result.intValue());
+            resultObject.setDetails(null);
+        }else {
+            resultObject.setCount(0);
+            resultObject.setDetails(null);
+        }
+
 
         return ResponseEntity.ok().body(resultObject);
 
@@ -259,9 +176,7 @@ public class EcpLogController {
             userDetails.setHostname(hostname);
             userDetails.setNtnet(ntnet);
 
-
             dbHandler.addUserDetails(userDetails);
-            LOG.info("Saved user details to database.");
         } catch (Exception e) {
             e.printStackTrace();
             LOG.warn("Exception occurred while logging to database.");
@@ -271,10 +186,8 @@ public class EcpLogController {
     }
 
     /**
-     * REST endpoint for storing records from excel into DB. It will delete existing
-     * records and add new records.
+     * Parse and store data from excel file into database.
      */
-
     @RequestMapping(value = "/getUnderlyingHFs", method = RequestMethod.GET)
     public ResponseEntity<Metadata> getUnderlyingHFs(
             @RequestParam(value = "latestEcp", defaultValue = "-", required = true) String latestEcp,
@@ -314,6 +227,7 @@ public class EcpLogController {
     public HotfixSummary getDatabaseSummary() {
         return dbHandler.getSummary();
     }
+
 
     @RequestMapping(value = "/getUserDetails", method = RequestMethod.GET)
     public List<UserDetails> getUserDetails(

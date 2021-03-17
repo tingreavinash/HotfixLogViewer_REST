@@ -70,7 +70,7 @@ public class HotfixviewerApplication implements CommandLineRunner {
     }
 
     private void loadSampleData() throws IOException {
-        ecpService.deleteAllRecords();
+        ecpService.deleteAll();
         LOG.info("Old records deleted");
 
         File file = resource.getFile();
@@ -78,7 +78,7 @@ public class HotfixviewerApplication implements CommandLineRunner {
 
         ECPLog[] arr = objectMapper.readValue(hfRecords, ECPLog[].class);
         List<ECPLog> ecpObjects = Arrays.asList(arr);
-        List<ECPLog> result = ecpService.addAllECPRecords(ecpObjects);
+        List<ECPLog> result = ecpService.saveAll(ecpObjects);
         LOG.info("Total records inserted: " + result.size());
     }
 

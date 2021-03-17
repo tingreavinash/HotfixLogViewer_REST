@@ -22,164 +22,126 @@ public class ECPLogService {
     @Autowired
     ECPLogRepository ecpRepo;
 
+
     /**
-     * Method for getting "pageable" results from Database with below matching parameters.
-     * @param ecpNo
-     * @param description
-     * @param cramerVersion
-     * @param latestEcp
-     * @param requestor
-     * @param fixedBy
-     * @param module
-     * @param caseOrCrNo
-     * @param filesModifiedInPerforce
-     * @param filesReleasedToCustomer
-     * @param rolledIntoVersion
-     * @param specificFunc
-     * @param page_no
-     * @param page_size
-     * @return List<ECPLog>
+     * Get all results from Database with matching parameters.
      */
     @SuppressWarnings("unchecked")
-    public List<ECPLog> getResultByFields(String ecpNo, String description, List<String> cramerVersion, String latestEcp,
-                                          String requestor, String fixedBy, List<String> module, String caseOrCrNo, String filesModifiedInPerforce,
-                                          String filesReleasedToCustomer, String rolledIntoVersion, String specificFunc, int page_no, int page_size) {
-        try {
+    public List<ECPLog> searchData(String ecpNo, String description, List<String> cramerVersion,
+                                   String latestEcp, String requestor, String fixedBy, List<String> module, String caseOrCrNo,
+                                   String filesModifiedInPerforce, String filesReleasedToCustomer, String rolledIntoVersion,
+                                   String specificFunc, int page_no, int page_size) {
+        ecpNo = formatString(ecpNo);
+        description = formatString(description);
+        latestEcp = formatString(latestEcp);
+        requestor = formatString(requestor);
+        fixedBy = formatString(fixedBy);
+        caseOrCrNo = formatString(caseOrCrNo);
+        filesModifiedInPerforce = formatString(filesModifiedInPerforce);
+        filesReleasedToCustomer = formatString(filesReleasedToCustomer);
+        rolledIntoVersion = formatString(rolledIntoVersion);
+        specificFunc = formatString(specificFunc);
 
-            ecpNo = ecpNo.replaceAll("\\s", ".*");
-            description = description.replaceAll("\\s", ".*");
-            latestEcp = latestEcp.replaceAll("\\s", ".*");
-            requestor = requestor.replaceAll("\\s", ".*");
-            fixedBy = fixedBy.replaceAll("\\s", ".*");
-            caseOrCrNo = caseOrCrNo.replaceAll("\\s", ".*");
-            filesModifiedInPerforce = filesModifiedInPerforce.replaceAll("\\s", ".*");
-            filesReleasedToCustomer = filesReleasedToCustomer.replaceAll("\\s", ".*");
-            rolledIntoVersion = rolledIntoVersion.replaceAll("\\s", ".*");
-            specificFunc = specificFunc.replaceAll("\\s", ".*");
+        List<ECPLog> result;
 
-
-            List<ECPLog> result = ecpRepo.findByOptionsWithPaging(".*" + ecpNo + ".*", ".*" + description + ".*",
-                    cramerVersion, ".*" + latestEcp + ".*", ".*" + requestor + ".*", ".*" + fixedBy + ".*",
-                    module, ".*" + caseOrCrNo + ".*", ".*" + filesModifiedInPerforce + ".*",
-                    ".*" + filesReleasedToCustomer + ".*", ".*" + rolledIntoVersion + ".*", ".*" + specificFunc + ".*",
+        if (page_no == -1 || page_size == -1) {
+            result = ecpRepo.findByOptions(ecpNo, description, cramerVersion,
+                    latestEcp, requestor, fixedBy, module, caseOrCrNo, filesModifiedInPerforce,
+                    filesReleasedToCustomer, rolledIntoVersion, specificFunc);
+        } else {
+            result = ecpRepo.findByOptionsWithPaging(ecpNo, description, cramerVersion,
+                    latestEcp, requestor, fixedBy, module, caseOrCrNo, filesModifiedInPerforce,
+                    filesReleasedToCustomer, rolledIntoVersion, specificFunc,
                     PageRequest.of(page_no, page_size));
-            Collections.sort(result);
-            return result;
-        } catch (Exception e) {
-            LOG.info("Exception:\n" + e.getMessage());
-            e.printStackTrace();
-            return null;
         }
 
+
+        Collections.sort(result);
+        return result;
     }
 
-    /**
-     * Method for getting all results from Database with below matching parameters.
-     * @param ecpNo
-     * @param description
-     * @param cramerVersion
-     * @param latestEcp
-     * @param requestor
-     * @param fixedBy
-     * @param module
-     * @param caseOrCrNo
-     * @param filesModifiedInPerforce
-     * @param filesReleasedToCustomer
-     * @param rolledIntoVersion
-     * @param specificFunc
-     * @return List<ECPLog>
+    /***
+     * Count all hotfixes in database.
      */
-    @SuppressWarnings("unchecked")
-    public List<ECPLog> getResultByFields(String ecpNo, String description, List<String> cramerVersion,
-                                          String latestEcp, String requestor, String fixedBy, List<String> module, String caseOrCrNo,
-                                          String filesModifiedInPerforce, String filesReleasedToCustomer, String rolledIntoVersion,
-                                          String specificFunc) {
-        try {
-
-            ecpNo = ecpNo.replaceAll("\\s", ".*");
-            description = description.replaceAll("\\s", ".*");
-            latestEcp = latestEcp.replaceAll("\\s", ".*");
-            requestor = requestor.replaceAll("\\s", ".*");
-            fixedBy = fixedBy.replaceAll("\\s", ".*");
-            caseOrCrNo = caseOrCrNo.replaceAll("\\s", ".*");
-            filesModifiedInPerforce = filesModifiedInPerforce.replaceAll("\\s", ".*");
-            filesReleasedToCustomer = filesReleasedToCustomer.replaceAll("\\s", ".*");
-            rolledIntoVersion = rolledIntoVersion.replaceAll("\\s", ".*");
-            specificFunc = specificFunc.replaceAll("\\s", ".*");
-
-            List<ECPLog> result = ecpRepo.findByOptions(".*" + ecpNo + ".*", ".*" + description + ".*", cramerVersion,
-                    ".*" + latestEcp + ".*", ".*" + requestor + ".*", ".*" + fixedBy + ".*", module,
-                    ".*" + caseOrCrNo + ".*", ".*" + filesModifiedInPerforce + ".*",
-                    ".*" + filesReleasedToCustomer + ".*", ".*" + rolledIntoVersion + ".*", ".*" + specificFunc + ".*");
-            Collections.sort(result);
-
-
-            return result;
-        } catch (Exception e) {
-            LOG.info("Exception:\n" + e.getMessage());
-            e.printStackTrace();
-            return null;
-        }
+    public long countAllHotfixes() {
+        return ecpRepo.count();
     }
 
-    public Long getRecordCount(String ecpNo, String description, List<String> cramerVersion,
-                                          String latestEcp, String requestor, String fixedBy, List<String> module, String caseOrCrNo,
-                                          String filesModifiedInPerforce, String filesReleasedToCustomer, String rolledIntoVersion,
-                                          String specificFunc) {
-        try {
-
-            ecpNo = ecpNo.replaceAll("\\s", ".*");
-            description = description.replaceAll("\\s", ".*");
-            latestEcp = latestEcp.replaceAll("\\s", ".*");
-            requestor = requestor.replaceAll("\\s", ".*");
-            fixedBy = fixedBy.replaceAll("\\s", ".*");
-            caseOrCrNo = caseOrCrNo.replaceAll("\\s", ".*");
-            filesModifiedInPerforce = filesModifiedInPerforce.replaceAll("\\s", ".*");
-            filesReleasedToCustomer = filesReleasedToCustomer.replaceAll("\\s", ".*");
-            rolledIntoVersion = rolledIntoVersion.replaceAll("\\s", ".*");
-            specificFunc = specificFunc.replaceAll("\\s", ".*");
-
-            Long result = ecpRepo.findByOptionsGetCount(".*" + ecpNo + ".*", ".*" + description + ".*", cramerVersion,
-                    ".*" + latestEcp + ".*", ".*" + requestor + ".*", ".*" + fixedBy + ".*", module,
-                    ".*" + caseOrCrNo + ".*", ".*" + filesModifiedInPerforce + ".*",
-                    ".*" + filesReleasedToCustomer + ".*", ".*" + rolledIntoVersion + ".*", ".*" + specificFunc + ".*");
-            return result;
-        } catch (Exception e) {
-            LOG.info("Exception:\n" + e.getMessage());
-            e.printStackTrace();
-            return null;
+    public Boolean minimumValuesProvided(String ecpNo, String description, List<String> cramerVersion,
+                                         String latestEcp, String requestor, String fixedBy, List<String> module, String caseOrCrNo,
+                                         String filesModifiedInPerforce, String filesReleasedToCustomer, String rolledIntoVersion,
+                                         String specificFunc){
+        Boolean flag=false;
+        if (!ecpNo.isEmpty() || !description.isEmpty() || !latestEcp.isEmpty() || !requestor.isEmpty() || !fixedBy.isEmpty()
+                || !caseOrCrNo.isEmpty() || !filesModifiedInPerforce.isEmpty() || !filesReleasedToCustomer.isEmpty()
+                || !rolledIntoVersion.isEmpty() || !specificFunc.isEmpty() || !cramerVersion.isEmpty() || !module.isEmpty()) {
+             flag = true;
         }
+        return  flag;
+
     }
 
+    /***
+     * Count total matching records for given parameters.
+     */
+    public Long countMatchingRecords(String ecpNo, String description, List<String> cramerVersion,
+                                     String latestEcp, String requestor, String fixedBy, List<String> module, String caseOrCrNo,
+                                     String filesModifiedInPerforce, String filesReleasedToCustomer, String rolledIntoVersion,
+                                     String specificFunc) {
+        ecpNo = formatString(ecpNo);
+        description = formatString(description);
+        latestEcp = formatString(latestEcp);
+        requestor = formatString(requestor);
+        fixedBy = formatString(fixedBy);
+        caseOrCrNo = formatString(caseOrCrNo);
+        filesModifiedInPerforce = formatString(filesModifiedInPerforce);
+        filesReleasedToCustomer = formatString(filesReleasedToCustomer);
+        rolledIntoVersion = formatString(rolledIntoVersion);
+        specificFunc = formatString(specificFunc);
 
-    public ECPLog addECP(ECPLog ecp_obj) {
+        Long result = ecpRepo.findByOptionsGetCount(ecpNo, description, cramerVersion,
+                latestEcp, requestor, fixedBy, module, caseOrCrNo, filesModifiedInPerforce,
+                filesReleasedToCustomer, rolledIntoVersion, specificFunc);
+        return result;
+    }
+
+    /***
+     * Save hotfixes details in database.
+     */
+    public ECPLog save(ECPLog ecp_obj) {
 
         return ecpRepo.save(ecp_obj);
     }
 
-    public void deleteAllRecords() {
+    /***
+     * Delete all hotfix records from database.
+     */
+    public void deleteAll() {
         ecpRepo.deleteAll();
     }
 
-    public List<ECPLog> addAllECPRecords(Iterable<ECPLog> ecp_list) {
+    /***
+     * Save batch of hotfixes in database.
+     */
+    public List<ECPLog> saveAll(Iterable<ECPLog> ecp_list) {
         return ecpRepo.saveAll(ecp_list);
     }
 
     /**
-     * Method for getting all records from Database.
-     * @return List of ECPLog
+     * Get all records from Database.
      */
-    public List<ECPLog> getAllECP() {
+    public List<ECPLog> findAll() {
         List<ECPLog> result = ecpRepo.findAll();
         if (result.isEmpty())
             return new ArrayList<>();
         return result;
     }
 
-    public long getCountOfHotfixes() {
-        return ecpRepo.count();
-    }
 
+
+    /***
+     * Get only those hotfixes which are superseded by given hotfix number.
+     */
     public Map<Integer, String> getUnderlyingHF(String latestEcp) {
         List<ECPLog> ecp = ecpRepo.findByLatestEcp(latestEcp);
         Map<Integer, String> result_map = new TreeMap<Integer, String>(Collections.reverseOrder());
@@ -194,44 +156,43 @@ public class ECPLogService {
         return result_map;
     }
 
-    public List<String> modifyListValues(List<String> values) {
-        List<String> result = new ArrayList<String>();
+    /***
+     * Get distinct product versions among all records.
+     */
+    public Set<String> getDistinctVersions() {
 
-        for (String s : values) {
-            s = "/" + s + "/i";
-            result.add(s);
-        }
-
-        return result;
-    }
-
-
-    public Set<String> getDistinctVersions(){
         Set<String> versions = new HashSet<String>();
-        try {
-            List<ECPLog> all_ecp = this.getAllECP();
-            for (ECPLog ecp : all_ecp) {
-                versions.add(ecp.getCramerVersion());
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        List<ECPLog> all_ecp = this.findAll();
+        for (ECPLog ecp : all_ecp) {
+            versions.add(ecp.getCramerVersion());
         }
 
         return versions;
     }
 
-    public Set<String> getDistinctModules(){
+    /***
+     * Get distinct product modules among all records.
+     */
+    public Set<String> getDistinctModules() {
         Set<String> modules = new HashSet<String>();
 
-        try {
-            List<ECPLog> all_ecp = this.getAllECP();
-            for (ECPLog ecp : all_ecp) {
-                modules.add(ecp.getModule());
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        List<ECPLog> all_ecp = this.findAll();
+        for (ECPLog ecp : all_ecp) {
+            modules.add(ecp.getModule());
         }
+
         return modules;
+    }
+
+    /***
+     * Utility method for appending/prepending/replacing all whitespaces with ".*"
+     */
+    public String formatString(String str) {
+        StringBuffer sb = new StringBuffer(str.trim());
+        sb.insert(0, ".*");
+        sb.append(".*");
+
+        return sb.toString().replaceAll("\\s", ".*");
     }
 
 }

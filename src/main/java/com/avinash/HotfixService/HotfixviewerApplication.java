@@ -24,12 +24,15 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.Resource;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.*;
 
+@EnableScheduling
 @SpringBootApplication
 public class HotfixviewerApplication implements CommandLineRunner {
 
@@ -44,14 +47,12 @@ public class HotfixviewerApplication implements CommandLineRunner {
     @Autowired
     EcpLogController ecpController;
 
-    @Value("classpath:data/SampleHotfixData.json")
-    Resource resource;
 
-    @Autowired
-    ObjectMapper objectMapper;
 
     @Value("${app.use_sample_data}")
     Boolean isLoadSampleData;
+    //Duration in miliseconds
+    private static final long SCHEDULE_DURATION = 32400000;
 
     public static void main(String[] args) {
         SpringApplication.run(HotfixviewerApplication.class, args);
@@ -69,18 +70,7 @@ public class HotfixviewerApplication implements CommandLineRunner {
                         .license(new License().name("Apache 2.0").url("http://springdoc.org")));
     }
 
-    private void loadSampleData() throws IOException {
-        ecpService.deleteAll();
-        LOG.info("Old records deleted");
 
-        File file = resource.getFile();
-        String hfRecords = new String(Files.readAllBytes(file.toPath()));
-
-        ECPLog[] arr = objectMapper.readValue(hfRecords, ECPLog[].class);
-        List<ECPLog> ecpObjects = Arrays.asList(arr);
-        List<ECPLog> result = ecpService.saveAll(ecpObjects);
-        LOG.info("Total records inserted: " + result.size());
-    }
 
     /**
      * This method runs immediately after starting spring boot app.
@@ -90,9 +80,15 @@ public class HotfixviewerApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws IOException, CloneNotSupportedException {
         LOG.info("============ Hotfix Application Started ============");
+        refreshDatabase();
+    }
 
+
+
+    @Scheduled(fixedDelay = SCHEDULE_DURATION)
+    public void refreshDatabase() throws IOException {
         if (isLoadSampleData) {
-            loadSampleData();
+            ecpService.loadSampleData();
 
         } else {
 
@@ -110,7 +106,6 @@ public class HotfixviewerApplication implements CommandLineRunner {
 
         distinctVersion.addAll(version_set);
         distinctModules.addAll(module_set);
-
     }
 
 }

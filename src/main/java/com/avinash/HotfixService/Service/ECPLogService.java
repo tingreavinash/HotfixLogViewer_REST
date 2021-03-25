@@ -7,12 +7,18 @@ package com.avinash.HotfixService.Service;
 
 import com.avinash.HotfixService.Model.ECPLog;
 import com.avinash.HotfixService.Repository.ECPLogRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.*;
 
 @Component
@@ -22,6 +28,11 @@ public class ECPLogService {
     @Autowired
     ECPLogRepository ecpRepo;
 
+    @Value("classpath:data/SampleHotfixData.json")
+    Resource resource;
+
+    @Autowired
+    ObjectMapper objectMapper;
 
     /**
      * Get all results from Database with matching parameters.
@@ -193,6 +204,20 @@ public class ECPLogService {
         sb.append(".*");
 
         return sb.toString().replaceAll("\\s", ".*");
+    }
+
+
+    public void loadSampleData() throws IOException {
+        deleteAll();
+        LOG.info("Old records deleted");
+
+        File file = resource.getFile();
+        String hfRecords = new String(Files.readAllBytes(file.toPath()));
+
+        ECPLog[] arr = objectMapper.readValue(hfRecords, ECPLog[].class);
+        List<ECPLog> ecpObjects = Arrays.asList(arr);
+        List<ECPLog> result = saveAll(ecpObjects);
+        LOG.info("Total records inserted: " + result.size());
     }
 
 }

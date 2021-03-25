@@ -35,8 +35,11 @@ public class ECPFileHandler {
     private ECPLogService ecpService;
     @Autowired
     private DatabaseLogHandler dbhistoryService;
-    @Value("${excelFilePath}")
+    @Value("${app.excelFilePath}")
     private String excelFilePath;
+
+    @Value("${app.sheet_name}")
+    private String sheetname;
 
     /**
      * Private method for converting "Row" into List of strings.
@@ -191,8 +194,8 @@ public class ECPFileHandler {
         Sheet sheet;
         try {
             int startRow = 7;
+
             int endRow = getLastRowNum();
-            // int endRow = 1000;
             ecpService.deleteAll();
             LOG.info("Old records Deleted.");
             File file = new File(excelFilePath);
@@ -201,8 +204,9 @@ public class ECPFileHandler {
             workbook = StreamingReader.builder().rowCacheSize(100).bufferSize(4096).open(fis);
 
             //sheet = workbook.getSheetAt(2);
-            sheet = workbook.getSheet("ECPlog");
+            sheet = workbook.getSheet(sheetname);
             LOG.info("Data loading started: " + new Date());
+
 
             for (Row r : sheet) {
                 if (r.getRowNum() >= startRow && r.getRowNum() < endRow) {
@@ -270,7 +274,9 @@ public class ECPFileHandler {
             File file = new File(excelFilePath);
             fis = new FileInputStream(file);
             workbook = StreamingReader.builder().rowCacheSize(100).bufferSize(4096).open(fis);
-            sheet = workbook.getSheetAt(2);
+            //sheet = workbook.getSheetAt(2);
+            sheet = workbook.getSheet(sheetname);
+
 
             for (Row r : sheet) {
 

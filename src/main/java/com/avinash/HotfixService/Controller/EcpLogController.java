@@ -20,10 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/HFLogViewer")
@@ -217,7 +214,7 @@ public class EcpLogController {
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, headerPrefix);
 
-        List<String> result = HotfixviewerApplication.distinctVersion;
+        List<String> result = new ArrayList<>(new HashSet<>(HotfixviewerApplication.distinctVersion));
 
         return ResponseEntity.ok().headers(headers).body(result);
 
@@ -244,7 +241,7 @@ public class EcpLogController {
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, headerPrefix);
 
-        List<String> result = HotfixviewerApplication.distinctModules;
+        List<String> result = new ArrayList<>(new HashSet<>(HotfixviewerApplication.distinctModules));
 
         return ResponseEntity.ok().headers(headers).body(result);
 

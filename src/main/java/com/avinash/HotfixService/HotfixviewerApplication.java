@@ -77,7 +77,7 @@ public class HotfixviewerApplication implements CommandLineRunner {
 
 
     @Scheduled(fixedDelay = SCHEDULE_DURATION)
-    public void refreshDatabase() throws IOException {
+    public synchronized void refreshDatabase() throws IOException {
         if (isLoadSampleData) {
             ecpService.loadSampleData();
 
@@ -94,9 +94,9 @@ public class HotfixviewerApplication implements CommandLineRunner {
 
         Set<String> version_set = ecpService.getDistinctVersions();
         Set<String> module_set = ecpService.getDistinctModules();
-
         distinctVersion.addAll(version_set);
         distinctModules.addAll(module_set);
+
     }
 
 }

@@ -170,7 +170,7 @@ public class ECPLogService {
     /***
      * Get distinct product versions among all records.
      */
-    public Set<String> getDistinctVersions() {
+    public synchronized Set<String> getDistinctVersions() {
 
         Set<String> versions = new HashSet<String>();
         List<ECPLog> all_ecp = this.findAll();
@@ -184,7 +184,7 @@ public class ECPLogService {
     /***
      * Get distinct product modules among all records.
      */
-    public Set<String> getDistinctModules() {
+    public synchronized Set<String> getDistinctModules() {
         Set<String> modules = new HashSet<String>();
 
         List<ECPLog> all_ecp = this.findAll();

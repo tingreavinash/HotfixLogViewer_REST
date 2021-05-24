@@ -20,7 +20,10 @@ import java.io.*;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 @Service
 public class ECPFileHandler {
@@ -62,7 +65,7 @@ public class ECPFileHandler {
                 c = new StreamingCell(i, row.getRowNum(), true);
             }
 
-            if (c.getColumnIndex() == COLUMN_INDEX.get("requestDate") || c.getColumnIndex() == COLUMN_INDEX.get("targetDate") || c.getColumnIndex() ==  COLUMN_INDEX.get("releasedDate") ) {
+            if (c.getColumnIndex() == COLUMN_INDEX.get("requestDate") || c.getColumnIndex() == COLUMN_INDEX.get("targetDate") || c.getColumnIndex() == COLUMN_INDEX.get("releasedDate")) {
                 DateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
                 if (c.getCellType() == CellType.NUMERIC && c.getDateCellValue() != null) {
                     String date = df.format(c.getDateCellValue());
@@ -115,7 +118,7 @@ public class ECPFileHandler {
         ecp_object.setPrereqForLatestEcp(row_values.get(COLUMN_INDEX.get("prereqForLatestEcp")));
         ecp_object.setLatestEcp(row_values.get(COLUMN_INDEX.get("latestEcp")));
         ecp_object.setEcpNo(row_values.get(COLUMN_INDEX.get("ecpNo")));
-        if ((row_values.get(COLUMN_INDEX.get("latestEcp")).equalsIgnoreCase(row_values.get(COLUMN_INDEX.get("ecpNo"))))){
+        if ((row_values.get(COLUMN_INDEX.get("latestEcp")).equalsIgnoreCase(row_values.get(COLUMN_INDEX.get("ecpNo"))))) {
             ecp_object.setIsThisLatestHF("TRUE");
         } else {
             ecp_object.setIsThisLatestHF("FALSE");
@@ -187,13 +190,13 @@ public class ECPFileHandler {
         return ecp_object;
     }
 
-    public synchronized void initializeColumnIndexes(Row headRow){
+    public synchronized void initializeColumnIndexes(Row headRow) {
         maxColNumber = headRow.getLastCellNum();
-        for (int i=0; i< maxColNumber; i++){
-            String str =null;
-            try{
+        for (int i = 0; i < maxColNumber; i++) {
+            String str = null;
+            try {
                 str = headRow.getCell(i).getStringCellValue();
-            }catch (NullPointerException ex){
+            } catch (NullPointerException ex) {
                 str = "xxx";
             }
 
@@ -228,7 +231,7 @@ public class ECPFileHandler {
             LOG.info("Data loading started: " + new Date());
 
             for (Row r : sheet) {
-                if (r.getRowNum() == headerRowNum){
+                if (r.getRowNum() == headerRowNum) {
                     initializeColumnIndexes(r);
                 }
 
@@ -316,10 +319,10 @@ public class ECPFileHandler {
                                 }
                             }
                         }
-                        if (flag != true)
+                        if (!flag)
                             break;
                     }
-                    if (flag != true) {
+                    if (!flag) {
                         break;
                     }
 

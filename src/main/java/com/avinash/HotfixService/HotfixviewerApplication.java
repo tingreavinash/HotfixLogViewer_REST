@@ -7,11 +7,9 @@
 package com.avinash.HotfixService;
 
 import com.avinash.HotfixService.Controller.EcpLogController;
-import com.avinash.HotfixService.Model.ECPLog;
 import com.avinash.HotfixService.Model.HotfixSummary;
 import com.avinash.HotfixService.Service.ECPFileHandler;
 import com.avinash.HotfixService.Service.ECPLogService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
@@ -23,36 +21,31 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.core.io.Resource;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 @EnableScheduling
 @SpringBootApplication
 public class HotfixviewerApplication implements CommandLineRunner {
 
     private static final Logger LOG = LoggerFactory.getLogger(HotfixviewerApplication.class);
+    //Duration in miliseconds
+    private static final long SCHEDULE_DURATION = 32400000;
     public static List<String> distinctVersion = new ArrayList<String>();
     public static List<String> distinctModules = new ArrayList<String>();
-
     @Autowired
     ECPLogService ecpService;
     @Autowired
     ECPFileHandler ecpHandler;
     @Autowired
     EcpLogController ecpController;
-
-
-
     @Value("${app.use_sample_data}")
     Boolean isLoadSampleData;
-    //Duration in miliseconds
-    private static final long SCHEDULE_DURATION = 32400000;
 
     public static void main(String[] args) {
         SpringApplication.run(HotfixviewerApplication.class, args);
@@ -71,7 +64,6 @@ public class HotfixviewerApplication implements CommandLineRunner {
     }
 
 
-
     /**
      * This method runs immediately after starting spring boot app.
      * It will delete old records from Database and will add all new records from excel into DB.
@@ -82,7 +74,6 @@ public class HotfixviewerApplication implements CommandLineRunner {
         LOG.info("============ Hotfix Application Started ============");
         refreshDatabase();
     }
-
 
 
     @Scheduled(fixedDelay = SCHEDULE_DURATION)

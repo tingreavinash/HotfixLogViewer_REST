@@ -7,7 +7,7 @@ package com.avinash.HotfixService.Service;
 
 public final class ECPLogConstants {
 
-
+    //Mapping column names to column indexes as per excel sheet structure.
     public static final int cramerVersion = 0;
     public static final int isPreRequisite = 1;
     public static final int prereqForLatestEcp = 2;

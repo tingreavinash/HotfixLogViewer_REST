@@ -70,14 +70,14 @@ public class HotfixviewerApplication implements CommandLineRunner {
      */
 
     @Override
-    public void run(String... args) throws IOException, CloneNotSupportedException {
+    public void run(String... args) throws Exception {
         LOG.info("============ Hotfix Application Started ============");
         refreshDatabase();
     }
 
 
     @Scheduled(fixedDelay = SCHEDULE_DURATION)
-    public synchronized void refreshDatabase() throws IOException {
+    public synchronized void refreshDatabase() throws Exception {
         if (isLoadSampleData) {
             ecpService.loadSampleData();
 

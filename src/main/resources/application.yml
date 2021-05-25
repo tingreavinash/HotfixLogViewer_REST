@@ -8,7 +8,7 @@ app:
   use_sample_data: false
   sheet_name: ECPList
   excelFilePath: C:\Personal\My Project\HotfixService\src\main\resources\data\TestData.xlsx
-  headerRowNum: 5 #0-based row index of header names in excel sheet.
+  headerRowNum: 5 #0-based row number of header in excel sheet.
 
 
 spring:

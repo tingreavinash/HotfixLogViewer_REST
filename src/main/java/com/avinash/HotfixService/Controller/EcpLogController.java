@@ -209,6 +209,7 @@ public class EcpLogController {
     @RequestMapping(value = "/getDistinctCramerVersions", method = RequestMethod.GET)
     public ResponseEntity<List<String>> getDistinctCramerVersions(HttpServletRequest request) {
 
+
         // To restrict the requests only from specific hosts, Uncomment the below line.
         // if (customConfig.getAllowedHosts().contains(client)) {
         HttpHeaders headers = new HttpHeaders();

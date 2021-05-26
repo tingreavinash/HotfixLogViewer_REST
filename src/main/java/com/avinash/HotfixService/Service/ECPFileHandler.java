@@ -225,7 +225,9 @@ public class ECPFileHandler {
                         row_values = getListFromRow(r);
                         ecplog = createObjectFromlist(total_records);
                     } catch (NullPointerException ex) {
-                        throw new NullPointerException("Column names are incorrectly defined. Check the values defined in ECPLogConstants class.\n");
+                        NullPointerException ex1 =  new NullPointerException("Column names are incorrectly defined. Check the values defined in ECPLogConstants class.\n");
+                        ex1.setStackTrace(ex.getStackTrace());
+                        throw  ex1;
                     }
 
                     ecpService.save(ecplog);

@@ -29,10 +29,10 @@ import java.util.List;
 public class ECPFileHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(ECPFileHandler.class);
-    private static List<ECPLog> ecp_list = new ArrayList<ECPLog>();
+    private static final List<ECPLog> ecp_list = new ArrayList<ECPLog>();
     private static List<String> row_values = new ArrayList<String>();
-    private static List<String> result = new ArrayList<String>();
-    private static LinkedHashMap<String, Integer> COLUMN_INDEX = new LinkedHashMap<>();
+    private static final List<String> result = new ArrayList<String>();
+    private static final LinkedHashMap<String, Integer> COLUMN_INDEX = new LinkedHashMap<>();
     private static int ColumnCount;
 
     @Autowired
@@ -95,7 +95,7 @@ public class ECPFileHandler {
 
     }
 
-    private static synchronized String getValue(String key){
+    private static synchronized String getValue(String key) {
         return row_values.get(COLUMN_INDEX.get(key));
     }
 
@@ -104,77 +104,77 @@ public class ECPFileHandler {
         ECPLog ecp_object = new ECPLog();
         ecp_object.set_id(count + 1);
 
-        ecp_object.setCramerVersion( getValue(ECPLogConstants.cramerVersion) );
-        ecp_object.setIsPreRequisite( getValue(ECPLogConstants.isPreRequisite) );
-        ecp_object.setPrereqForLatestEcp( getValue(ECPLogConstants.prereqForLatestEcp) );
-        ecp_object.setLatestEcp( getValue(ECPLogConstants.latestEcp) );
-        ecp_object.setEcpNo( getValue(ECPLogConstants.ecpNo) );
-        if (( getValue(ECPLogConstants.latestEcp) ).equalsIgnoreCase( getValue(ECPLogConstants.ecpNo) )) {
+        ecp_object.setCramerVersion(getValue(ECPLogConstants.cramerVersion));
+        ecp_object.setIsPreRequisite(getValue(ECPLogConstants.isPreRequisite));
+        ecp_object.setPrereqForLatestEcp(getValue(ECPLogConstants.prereqForLatestEcp));
+        ecp_object.setLatestEcp(getValue(ECPLogConstants.latestEcp));
+        ecp_object.setEcpNo(getValue(ECPLogConstants.ecpNo));
+        if ((getValue(ECPLogConstants.latestEcp)).equalsIgnoreCase(getValue(ECPLogConstants.ecpNo))) {
             ecp_object.setIsThisLatestHF("TRUE");
         } else {
             ecp_object.setIsThisLatestHF("FALSE");
         }
-        ecp_object.setSequence( getValue(ECPLogConstants.sequence) );
-        ecp_object.setOrNo( getValue(ECPLogConstants.orNo) );
-        ecp_object.setDescription( getValue(ECPLogConstants.description) );
-        ecp_object.setStatus( getValue(ECPLogConstants.status) );
-        ecp_object.setFixedBy( getValue(ECPLogConstants.fixedBy) );
-        ecp_object.setModule( getValue(ECPLogConstants.module) );
-        ecp_object.setVersion( getValue(ECPLogConstants.version) );
-        ecp_object.setCaseOrCrNo( getValue(ECPLogConstants.caseOrCrNo) );
-        ecp_object.setRequestor( getValue(ECPLogConstants.requestor) );
-        ecp_object.setFilesModifiedInPerforce( getValue(ECPLogConstants.filesModifiedInPerforce) );
-        ecp_object.setFileLocationInPerforce( getValue(ECPLogConstants.fileLocationInPerforce) );
-        ecp_object.setFilesReleasedToCustomer( getValue(ECPLogConstants.filesReleasedToCustomer) );
-        ecp_object.setType( getValue(ECPLogConstants.type) );
-        ecp_object.setNotes( getValue(ECPLogConstants.notes) );
-        ecp_object.setDownloadCenter( getValue(ECPLogConstants.downloadCenter) );
-        ecp_object.setEcpReplaced( getValue(ECPLogConstants.ecpReplaced) );
-        ecp_object.setAdditionalInfo( getValue(ECPLogConstants.additionalInfo) );
-        ecp_object.setFixRolledIntoModule( getValue(ECPLogConstants.fixRolledIntoModule) );
-        ecp_object.setRolledIntoVersion( getValue(ECPLogConstants.rolledIntoVersion) );
-        ecp_object.setRollupCr( getValue(ECPLogConstants.rollupCr) );
-        ecp_object.setEscapingDefect( getValue(ECPLogConstants.escapingDefect) );
-        ecp_object.setReportingVersion( getValue(ECPLogConstants.reportingVersion) );
-        ecp_object.setOriginalIssue( getValue(ECPLogConstants.originalIssue) );
-        ecp_object.setAddedToExtranet( getValue(ECPLogConstants.addedToExtranet) );
-        ecp_object.setAddedToExtranetUpdate( getValue(ECPLogConstants.addedToExtranetUpdate) );
-        ecp_object.setAddedToPatchBundle( getValue(ECPLogConstants.addedToPatchBundle) );
-        ecp_object.setHfNotBuiltSep( getValue(ECPLogConstants.hfNotBuiltSep) );
-        ecp_object.setC4IssueAlso( getValue(ECPLogConstants.c4IssueAlso) );
-        ecp_object.setC5IssueAlso( getValue(ECPLogConstants.c5IssueAlso) );
-        ecp_object.setMissingBasicFunc( getValue(ECPLogConstants.missingBasicFunc) );
-        ecp_object.setNewComponent( getValue(ECPLogConstants.newComponent) );
-        ecp_object.setCausedByNewComp( getValue(ECPLogConstants.causedByNewComp) );
-        ecp_object.setPlatformIssue( getValue(ECPLogConstants.platformIssue) );
-        ecp_object.setPerfIssue( getValue(ECPLogConstants.perfIssue) );
-        ecp_object.setUpgradeIssue( getValue(ECPLogConstants.upgradeIssue) );
-        ecp_object.setNewFuncAdded( getValue(ECPLogConstants.newFuncAdded) );
-        ecp_object.setMandatoryEcp( getValue(ECPLogConstants.mandatoryEcp) );
-        ecp_object.setSpecificFunc( getValue(ECPLogConstants.specificFunc) );
-        ecp_object.setMultiModulesAffected( getValue(ECPLogConstants.multiModulesAffected) );
-        ecp_object.setSeverity( getValue(ECPLogConstants.severity) );
-        ecp_object.setPriority( getValue(ECPLogConstants.priority) );
-        ecp_object.setEcpFaulty( getValue(ECPLogConstants.ecpFaulty) );
-        ecp_object.setHfRolllupInfo( getValue(ECPLogConstants.hfRolllupInfo) );
+        ecp_object.setSequence(getValue(ECPLogConstants.sequence));
+        ecp_object.setOrNo(getValue(ECPLogConstants.orNo));
+        ecp_object.setDescription(getValue(ECPLogConstants.description));
+        ecp_object.setStatus(getValue(ECPLogConstants.status));
+        ecp_object.setFixedBy(getValue(ECPLogConstants.fixedBy));
+        ecp_object.setModule(getValue(ECPLogConstants.module));
+        ecp_object.setVersion(getValue(ECPLogConstants.version));
+        ecp_object.setCaseOrCrNo(getValue(ECPLogConstants.caseOrCrNo));
+        ecp_object.setRequestor(getValue(ECPLogConstants.requestor));
+        ecp_object.setFilesModifiedInPerforce(getValue(ECPLogConstants.filesModifiedInPerforce));
+        ecp_object.setFileLocationInPerforce(getValue(ECPLogConstants.fileLocationInPerforce));
+        ecp_object.setFilesReleasedToCustomer(getValue(ECPLogConstants.filesReleasedToCustomer));
+        ecp_object.setType(getValue(ECPLogConstants.type));
+        ecp_object.setNotes(getValue(ECPLogConstants.notes));
+        ecp_object.setDownloadCenter(getValue(ECPLogConstants.downloadCenter));
+        ecp_object.setEcpReplaced(getValue(ECPLogConstants.ecpReplaced));
+        ecp_object.setAdditionalInfo(getValue(ECPLogConstants.additionalInfo));
+        ecp_object.setFixRolledIntoModule(getValue(ECPLogConstants.fixRolledIntoModule));
+        ecp_object.setRolledIntoVersion(getValue(ECPLogConstants.rolledIntoVersion));
+        ecp_object.setRollupCr(getValue(ECPLogConstants.rollupCr));
+        ecp_object.setEscapingDefect(getValue(ECPLogConstants.escapingDefect));
+        ecp_object.setReportingVersion(getValue(ECPLogConstants.reportingVersion));
+        ecp_object.setOriginalIssue(getValue(ECPLogConstants.originalIssue));
+        ecp_object.setAddedToExtranet(getValue(ECPLogConstants.addedToExtranet));
+        ecp_object.setAddedToExtranetUpdate(getValue(ECPLogConstants.addedToExtranetUpdate));
+        ecp_object.setAddedToPatchBundle(getValue(ECPLogConstants.addedToPatchBundle));
+        ecp_object.setHfNotBuiltSep(getValue(ECPLogConstants.hfNotBuiltSep));
+        ecp_object.setC4IssueAlso(getValue(ECPLogConstants.c4IssueAlso));
+        ecp_object.setC5IssueAlso(getValue(ECPLogConstants.c5IssueAlso));
+        ecp_object.setMissingBasicFunc(getValue(ECPLogConstants.missingBasicFunc));
+        ecp_object.setNewComponent(getValue(ECPLogConstants.newComponent));
+        ecp_object.setCausedByNewComp(getValue(ECPLogConstants.causedByNewComp));
+        ecp_object.setPlatformIssue(getValue(ECPLogConstants.platformIssue));
+        ecp_object.setPerfIssue(getValue(ECPLogConstants.perfIssue));
+        ecp_object.setUpgradeIssue(getValue(ECPLogConstants.upgradeIssue));
+        ecp_object.setNewFuncAdded(getValue(ECPLogConstants.newFuncAdded));
+        ecp_object.setMandatoryEcp(getValue(ECPLogConstants.mandatoryEcp));
+        ecp_object.setSpecificFunc(getValue(ECPLogConstants.specificFunc));
+        ecp_object.setMultiModulesAffected(getValue(ECPLogConstants.multiModulesAffected));
+        ecp_object.setSeverity(getValue(ECPLogConstants.severity));
+        ecp_object.setPriority(getValue(ECPLogConstants.priority));
+        ecp_object.setEcpFaulty(getValue(ECPLogConstants.ecpFaulty));
+        ecp_object.setHfRolllupInfo(getValue(ECPLogConstants.hfRolllupInfo));
 
         SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
 
 
         try {
-            ecp_object.setRequestDate(df.parse( getValue(ECPLogConstants.requestDate) ));
+            ecp_object.setRequestDate(df.parse(getValue(ECPLogConstants.requestDate)));
         } catch (ParseException e) {
-            ecp_object.setRequestDate(new Date(0, 0, 0) );
+            ecp_object.setRequestDate(new Date(0, 0, 0));
         }
         try {
-            ecp_object.setTargetDate(df.parse( getValue(ECPLogConstants.targetDate) ));
+            ecp_object.setTargetDate(df.parse(getValue(ECPLogConstants.targetDate)));
         } catch (ParseException e) {
-            ecp_object.setTargetDate(new Date(0, 0, 0) );
+            ecp_object.setTargetDate(new Date(0, 0, 0));
         }
         try {
-            ecp_object.setReleasedDate(df.parse( getValue(ECPLogConstants.releasedDate) ));
+            ecp_object.setReleasedDate(df.parse(getValue(ECPLogConstants.releasedDate)));
         } catch (ParseException e) {
-            ecp_object.setReleasedDate(new Date(0, 0, 0) );
+            ecp_object.setReleasedDate(new Date(0, 0, 0));
         }
         return ecp_object;
     }
@@ -225,9 +225,9 @@ public class ECPFileHandler {
                         row_values = getListFromRow(r);
                         ecplog = createObjectFromlist(total_records);
                     } catch (NullPointerException ex) {
-                        NullPointerException ex1 =  new NullPointerException("Column names are incorrectly defined. Check the values defined in ECPLogConstants class.\n");
+                        Exception ex1 = new NullPointerException("Column names are incorrectly defined. Check the values defined in ECPLogConstants class.\n");
                         ex1.setStackTrace(ex.getStackTrace());
-                        throw  ex1;
+                        throw ex1;
                     }
 
                     ecpService.save(ecplog);
@@ -238,7 +238,7 @@ public class ECPFileHandler {
             LOG.info("Data loading finished: " + new Date());
             saveSummaryInDB();
         } catch (FileNotFoundException ex) {
-            throw new FileNotFoundException(ex.getMessage());
+            throw ex;
         } finally {
             if (workbook != null) {
                 workbook.close();
@@ -307,7 +307,7 @@ public class ECPFileHandler {
             }
 
         } catch (FileNotFoundException ex) {
-            throw new FileNotFoundException(ex.getMessage());
+            throw ex;
         } finally {
             if (workbook != null) {
                 workbook.close();

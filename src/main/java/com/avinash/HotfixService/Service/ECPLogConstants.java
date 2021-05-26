@@ -15,11 +15,13 @@ public final class ECPLogConstants {
     public static final String latestEcp = "latestEcp";
     public static final String ecpNo = "ecpNo";
     public static final String sequence = "sequence";
-    public static final String orNo = "orNo";
+    public static final String orNo = "Or\n" +
+            "No";
     public static final String description = "description";
     public static final String status = "status";
     public static final String fixedBy = "fixedBy";
-    public static final String requestDate = "requestDate";
+    public static final String requestDate = "Request\n" +
+            "Date";
     public static final String targetDate = "targetDate";
     public static final String releasedDate = "releasedDate";
     public static final String module = "module";
